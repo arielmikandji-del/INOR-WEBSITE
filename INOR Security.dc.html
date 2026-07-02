@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Playfair+Display:ital,wght@1,500;1,600;1,700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    @keyframes shieldFloat { 0%,100% { transform: translateY(0) rotateZ(0deg); } 50% { transform: translateY(-10px) rotateZ(0.5deg); } }
+    @keyframes spin360 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes spinRev360 { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+    @keyframes pulseBlip { 0% { transform: scale(1); opacity: 0.9; } 100% { transform: scale(2.1); opacity: 0; } }
+    @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(0.86); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes liveDot { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+    @keyframes trackJitter { 0% { transform: translate(0,0); } 25% { transform: translate(5px,-4px); } 50% { transform: translate(-4px,3px); } 75% { transform: translate(3px,4px); } 100% { transform: translate(0,0); } }
+    @keyframes dashFlow { to { stroke-dashoffset: 0; } }
+    @keyframes knotDraw { to { stroke-dashoffset: 0; } }
+    @keyframes fpScan { 0% { transform: translateY(-46px); opacity: 0; } 10% { opacity: 1; } 45% { transform: translateY(46px); opacity: 1; } 55% { opacity: 0; } 100% { transform: translateY(46px); opacity: 0; } }
+    @keyframes fpFlash { 0%, 38%, 62%, 100% { stroke: var(--fp-base, #102018); } 48% { stroke: var(--flash-color, #2A4A38); } }
+    @keyframes heartbeatPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.018); } }
+    @keyframes heartbeatRing { 0% { transform: translate(-50%,-50%) scale(0.9); opacity: 0.28; } 100% { transform: translate(-50%,-50%) scale(1.4); opacity: 0; } }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #102018; }
+  </style>
+</helmet>
+
+<div ref="{{ setRootRef }}" style="background:#DCD8D0; font-family:'Inter',sans-serif; color:#102018; overflow-x:hidden; position:relative;">
+
+  <!-- ============ CUSTOM CURSOR ============ -->
+  <sc-if value="{{ cursorOn }}" hint-placeholder-val="{{ false }}">
+    <div ref="{{ setCursorRingRef }}" style="position:fixed; top:0; left:0; width:36px; height:36px; border-radius:50%; border:1.5px solid #F5F2EE; mix-blend-mode:difference; pointer-events:none; z-index:9999; transform:translate(-100px,-100px);"></div>
+    <div ref="{{ setCursorDotRef }}" style="position:fixed; top:0; left:0; width:8px; height:8px; border-radius:50%; background:#F5F2EE; mix-blend-mode:difference; pointer-events:none; z-index:9999; transform:translate(-100px,-100px);"></div>
+  </sc-if>
+
+  <!-- ============ NAVBAR ============ -->
+  <header data-screen-label="Navbar" style="position:fixed; top:0; left:0; right:0; z-index:50; display:flex; justify-content:center; padding-top:24px; padding-left:16px; padding-right:16px; pointer-events:none;">
+    <nav style="{{ navStyle }}">
+      <a href="#" style="display:flex; align-items:center; text-decoration:none;">
+        <img src="assets/shield-and-name-transparent.svg" alt="INOR Security" style="{{ navLogoStyle }}">
+      </a>
+      <div style="display:flex; align-items:center; gap:32px; font-family:'JetBrains Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:0.14em;">
+        <a href="#services" style="color:inherit; text-decoration:none; transition:opacity 250ms ease;" style-hover="opacity:0.55;">Services</a>
+        <a href="#protocol" style="color:inherit; text-decoration:none; transition:opacity 250ms ease;" style-hover="opacity:0.55;">Protocol</a>
+        <a href="#contact" style="color:inherit; text-decoration:none; transition:opacity 250ms ease;" style-hover="opacity:0.55;">Contact</a>
+      </div>
+      <a href="#contact" style="{{ navCtaStyle }}" style-hover="transform:scale(1.05);">Initiate</a>
+    </nav>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section data-screen-label="Hero" style="position:relative; min-height:100dvh; width:100%; overflow:hidden; display:flex; align-items:center; justify-content:space-between; padding:0 24px; background:#102018;">
+    <div style="position:absolute; inset:0; z-index:0;">
+      <img src="assets/photo-suv-dusk.jpg" alt="" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 30%; filter:saturate(0.8) brightness(0.9);">
+      <div style="position:absolute; inset:0; background:linear-gradient(100deg, rgba(16,32,24,0.95) 0%, rgba(16,32,24,0.82) 45%, rgba(16,32,24,0.45) 100%);"></div>
+    </div>
+
+    <div style="position:relative; z-index:30; width:100%; max-width:720px; display:flex; flex-direction:column; align-items:flex-start; padding-top:120px; animation:fadeUp 1.1s cubic-bezier(0.22,1,0.36,1) both;">
+      <h1 style="display:flex; flex-direction:column; gap:10px; margin:0;">
+        <span style="font-family:'Inter',sans-serif; font-weight:700; font-size:clamp(20px,3vw,30px); color:#F5F2EE; letter-spacing:-0.01em; text-transform:uppercase;">Executive protection meets</span>
+        <span style="font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(48px,9vw,112px); line-height:0.9; color:#F5F2EE; margin-left:-2px;">Absolute discretion.</span>
+      </h1>
+      <p style="margin-top:36px; font-family:'JetBrains Mono',monospace; font-size:14px; color:rgba(245,242,238,0.7); max-width:440px; text-transform:uppercase; letter-spacing:0.08em; line-height:1.7;">
+        Vetted operators. Plain clothes. Single-point command. Sized to the principal — never to a package.
+      </p>
+      <a href="#contact" style="{{ heroCtaStyle }}" style-hover="transform:translateY(-2px);">
+        <span>Initiate Consultation</span>
+      </a>
+
+      <div style="margin-top:40px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+        <span style="font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(245,242,238,0.5);">SIA-licensed operators</span>
+        <span style="width:3px; height:3px; border-radius:50%; background:rgba(245,242,238,0.3);"></span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(245,242,238,0.5);">NDA-backed engagements</span>
+        <span style="width:3px; height:3px; border-radius:50%; background:rgba(245,242,238,0.3);"></span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(245,242,238,0.5);">24/7 tasking</span>
+      </div>
+    </div>
+
+    <div style="{{ heroIslandStyle }}">
+      <span style="position:absolute; flex-shrink:0; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; border:1px solid rgba(245,242,238,0.45); width: 520px; height: 520px; {{ ringAnimStyle1 }}"></span>
+      <span style="position:absolute; flex-shrink:0; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; border:1px solid rgba(245,242,238,0.45); width: 520px; height: 520px; {{ ringAnimStyle2 }}"></span>
+      <svg viewBox="0 0 611.25 453.749987" role="img" aria-label="INOR Security" style="{{ heroShieldTintStyle }} width: 720px; height: 735px;">
+        <path fill="{{ heroShieldColor }}" fill-opacity="1" fill-rule="nonzero" d="M 304.882812 209.484375 C 304.882812 209.585938 304.847656 209.671875 304.777344 209.742188 C 304.707031 209.8125 304.625 209.847656 304.523438 209.847656 L 174.820312 209.847656 C 174.730469 209.847656 174.65625 209.8125 174.59375 209.75 C 174.53125 209.6875 174.5 209.613281 174.5 209.523438 C 174.519531 207.855469 174.582031 206.589844 174.691406 205.726562 C 178.371094 176.601562 191.808594 149.574219 212.265625 128.996094 C 232.769531 108.367188 260.648438 94.675781 289.863281 92.203125 C 290.074219 92.1875 290.253906 92.25 290.40625 92.394531 C 290.558594 92.535156 290.636719 92.710938 290.636719 92.921875 L 290.636719 175.6875 C 290.636719 175.808594 290.59375 175.914062 290.507812 176 C 290.421875 176.085938 290.316406 176.128906 290.195312 176.128906 L 265.667969 176.128906 C 265.539062 176.128906 265.425781 176.082031 265.335938 175.992188 C 265.242188 175.898438 265.195312 175.789062 265.195312 175.65625 L 265.195312 125.296875 C 265.195312 125.214844 265.175781 125.136719 265.136719 125.066406 C 265.097656 124.992188 265.046875 124.933594 264.976562 124.886719 C 264.910156 124.839844 264.835938 124.8125 264.753906 124.800781 C 264.671875 124.792969 264.59375 124.804688 264.515625 124.832031 C 236.800781 136.003906 217.691406 155.605469 207.195312 183.636719 C 207.160156 183.730469 207.164062 183.824219 207.214844 183.914062 C 207.261719 184.003906 207.335938 184.0625 207.433594 184.085938 C 208.484375 184.34375 209.648438 184.46875 210.925781 184.453125 C 223.804688 184.308594 242.246094 184.292969 266.246094 184.414062 C 278.664062 184.472656 291.128906 184.25 304.660156 184.398438 C 304.808594 184.398438 304.882812 184.472656 304.882812 184.625 Z M 304.882812 209.484375 " />
+        <path fill="{{ heroShieldColor }}" fill-opacity="1" fill-rule="nonzero" d="M 313.722656 92.261719 C 317.144531 92.382812 319.691406 92.554688 321.363281 92.78125 C 332.878906 94.296875 344.023438 97.519531 354.792969 102.449219 C 392.976562 119.925781 420.1875 154.144531 428.40625 195.644531 C 429.371094 200.488281 429.917969 204.925781 430.046875 208.960938 C 430.054688 209.207031 429.976562 209.414062 429.808594 209.589844 C 429.640625 209.765625 429.433594 209.855469 429.195312 209.851562 L 347.371094 209.851562 C 347.234375 209.851562 347.117188 209.804688 347.023438 209.707031 C 346.925781 209.609375 346.875 209.488281 346.875 209.351562 L 346.875 184.902344 C 346.875 184.761719 346.925781 184.640625 347.027344 184.542969 C 347.125 184.441406 347.246094 184.390625 347.386719 184.390625 L 396.992188 184.390625 C 397.109375 184.394531 397.21875 184.367188 397.320312 184.3125 C 397.425781 184.257812 397.511719 184.183594 397.582031 184.089844 C 397.648438 183.996094 397.691406 183.886719 397.707031 183.773438 C 397.722656 183.65625 397.710938 183.542969 397.671875 183.433594 C 394.324219 174.015625 389.585938 165.175781 383.453125 156.914062 C 372.160156 141.699219 357.578125 130.824219 339.714844 124.292969 C 339.46875 124.199219 339.25 124.246094 339.0625 124.433594 C 338.875 124.621094 338.824219 124.839844 338.914062 125.085938 C 339.25 126.039062 339.011719 127.207031 339.011719 128.519531 C 339.007812 145.414062 338.992188 162.5625 338.964844 179.964844 C 338.953125 190.460938 338.996094 198.394531 339.101562 203.761719 C 339.28125 213.011719 339.222656 220.96875 338.921875 227.636719 C 338.910156 227.898438 338.808594 228.121094 338.617188 228.300781 C 338.425781 228.484375 338.199219 228.574219 337.933594 228.574219 L 313.421875 228.574219 C 313.339844 228.574219 313.269531 228.542969 313.210938 228.484375 C 313.152344 228.425781 313.125 228.355469 313.125 228.273438 L 313.125 92.839844 C 313.125 92.675781 313.183594 92.535156 313.300781 92.421875 C 313.417969 92.308594 313.558594 92.257812 313.722656 92.261719 Z M 313.722656 92.261719 " />
+        <path fill="{{ heroShieldColor }}" fill-opacity="1" fill-rule="nonzero" d="M 290.644531 219.328125 L 290.644531 352.425781 C 290.644531 352.550781 290.59375 352.65625 290.496094 352.734375 C 290.398438 352.816406 290.289062 352.839844 290.164062 352.816406 C 286.628906 352.117188 282.6875 351.9375 278.753906 351.144531 C 261.585938 347.695312 245.734375 341.144531 231.203125 331.496094 C 216.65625 321.839844 204.632812 309.644531 195.128906 294.910156 C 184.105469 277.824219 177.265625 258.867188 174.601562 238.046875 C 174.578125 237.851562 174.632812 237.675781 174.765625 237.527344 C 174.894531 237.375 175.0625 237.300781 175.261719 237.300781 L 256.148438 237.300781 C 256.363281 237.300781 256.546875 237.375 256.699219 237.527344 C 256.851562 237.679688 256.925781 237.863281 256.925781 238.078125 L 256.925781 261.882812 C 256.925781 262.09375 256.851562 262.273438 256.707031 262.417969 C 256.558594 262.566406 256.378906 262.640625 256.171875 262.640625 L 207.996094 262.640625 C 207.726562 262.644531 207.550781 262.773438 207.46875 263.03125 C 207.386719 263.289062 207.457031 263.496094 207.683594 263.644531 C 208.28125 264.058594 208.132812 264.429688 208.3125 264.867188 C 216.03125 283.472656 228.121094 298.527344 244.574219 310.027344 C 251.007812 314.523438 257.6875 318.203125 264.613281 321.070312 C 264.679688 321.097656 264.746094 321.109375 264.816406 321.101562 C 264.886719 321.09375 264.953125 321.070312 265.011719 321.03125 C 265.070312 320.992188 265.117188 320.941406 265.148438 320.878906 C 265.179688 320.816406 265.199219 320.75 265.195312 320.679688 L 265.195312 219.335938 C 265.195312 219.195312 265.246094 219.074219 265.347656 218.976562 C 265.445312 218.878906 265.566406 218.828125 265.707031 218.828125 L 290.132812 218.828125 C 290.273438 218.828125 290.394531 218.875 290.496094 218.972656 C 290.59375 219.074219 290.644531 219.191406 290.644531 219.328125 Z M 290.644531 219.328125 " />
+        <path fill="{{ heroShieldColor }}" fill-opacity="1" fill-rule="nonzero" d="M 339.125 271.742188 L 339.125 321.070312 C 339.125 321.175781 339.167969 321.261719 339.257812 321.320312 C 339.34375 321.382812 339.4375 321.394531 339.535156 321.355469 C 345.5 319.035156 351.242188 316.074219 356.765625 312.46875 C 374.636719 300.792969 387.730469 285.101562 396.046875 265.398438 C 396.359375 264.632812 396.234375 264.132812 396.796875 263.511719 C 396.953125 263.339844 396.984375 263.148438 396.890625 262.933594 C 396.792969 262.722656 396.632812 262.617188 396.398438 262.617188 L 299.453125 262.617188 C 299.296875 262.617188 299.160156 262.5625 299.050781 262.449219 C 298.9375 262.335938 298.882812 262.199219 298.882812 262.042969 L 298.882812 237.996094 C 298.882812 237.8125 298.949219 237.660156 299.078125 237.53125 C 299.207031 237.402344 299.367188 237.335938 299.550781 237.335938 L 429.089844 237.335938 C 429.214844 237.335938 429.335938 237.363281 429.453125 237.414062 C 429.566406 237.46875 429.667969 237.539062 429.75 237.636719 C 429.835938 237.730469 429.894531 237.835938 429.933594 237.957031 C 429.96875 238.078125 429.980469 238.199219 429.964844 238.324219 C 428.757812 247.640625 426.472656 257.136719 423.109375 266.820312 C 411.523438 300.207031 386.996094 326.941406 355.167969 341.96875 C 343.789062 347.34375 331.007812 350.878906 316.832031 352.574219 C 315.753906 352.703125 314.652344 352.957031 313.574219 352.835938 C 313.441406 352.824219 313.335938 352.765625 313.246094 352.667969 C 313.160156 352.570312 313.117188 352.453125 313.117188 352.320312 L 313.117188 271.539062 C 313.117188 271.464844 313.140625 271.402344 313.195312 271.347656 C 313.246094 271.296875 313.3125 271.269531 313.386719 271.269531 L 338.652344 271.269531 C 338.78125 271.269531 338.894531 271.316406 338.984375 271.410156 C 339.078125 271.5 339.125 271.613281 339.125 271.742188 Z M 339.125 271.742188 " />
+      </svg>
+    </div>
+
+    <!-- ============ ISLAND DIVIDER (brand mark) ============ -->
+    <sc-if value="{{ showDividers }}">
+      <div style="position:absolute; z-index:20; bottom:96px; left:0; width:100%; pointer-events:none;">
+        <div style="max-width:1152px; margin:0 auto; display:flex; align-items:center; gap:24px; padding:0 24px;">
+          <span style="height:1px; flex:1; background:linear-gradient(90deg, transparent, rgba(220,216,208,0.25));"></span>
+          <svg viewBox="0 0 80 56" style="height:44px; width:auto; flex-shrink:0;">
+            <circle cx="40" cy="28" r="22" fill="none" stroke="rgba(245,242,238,0.85)" stroke-width="1.5"></circle>
+            <line x1="18" y1="28" x2="62" y2="28" stroke="rgba(245,242,238,0.85)" stroke-width="1"></line>
+            <line x1="40" y1="6" x2="40" y2="50" stroke="rgba(245,242,238,0.85)" stroke-width="1"></line>
+          </svg>
+          <span style="height:1px; flex:1; background:linear-gradient(270deg, transparent, rgba(220,216,208,0.25));"></span>
+        </div>
+      </div>
+    </sc-if>
+  </section>
+
+  <!-- ============ FEATURES / SERVICES ============ -->
+  <section id="services" data-screen-label="Services" style="position:relative; width:100%; background:#DCD8D0; padding:96px 24px; overflow:hidden;">
+    <div style="{{ accentGlowStyle }}"></div>
+    <div style="max-width:1280px; margin:0 auto; position:relative;">
+      <div data-reveal style="display:flex; flex-direction:column; align-items:flex-start; gap:16px; margin-bottom:72px;">
+        <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.2em; color:{{ accentColor }};">Core Capabilities</span>
+        <h2 style="font-family:'Inter',sans-serif; font-weight:700; font-size:clamp(32px,5vw,56px); color:#102018; letter-spacing:-0.02em; max-width:640px; line-height:1.1; margin:0;">
+          Precision-engineered<br>
+          <span style="font-family:'Playfair Display',serif; font-style:italic; color:rgba(16,32,24,0.55); font-size:1.1em;">risk mitigation.</span>
+        </h2>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:32px;">
+
+        <!-- Card 1: Executive Protection -->
+        <div data-reveal data-reveal-delay="0" style="position:relative; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; border-radius:32px; background:rgba(232,226,220,0.5); border:1px solid rgba(16,32,24,0.08); padding:32px; height:400px; box-shadow:0 2px 12px rgba(16,32,24,0.05);">
+          <div style="position:relative; z-index:10;">
+            <h3 style="font-family:'Inter',sans-serif; font-weight:700; font-size:20px; color:#102018; margin:0 0 8px 0;">Executive Protection</h3>
+            <p style="font-family:'Inter',sans-serif; font-size:14px; color:#2A4A38; line-height:1.6; margin:0;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+          </div>
+          <div style="height:190px; width:100%; margin-top:32px; border-radius:20px; background:#102018; display:flex; justify-content:center; align-items:center;">
+            <svg viewBox="0 0 200 200" style="width:100%; height:100%; max-width:200px;">
+              <circle cx="100" cy="100" r="80" fill="none" stroke="#DCD8D0" stroke-width="0.5" stroke-opacity="0.2" stroke-dasharray="2 4"></circle>
+              <circle cx="100" cy="100" r="50" fill="none" stroke="#DCD8D0" stroke-width="0.5" stroke-opacity="0.3"></circle>
+              <circle cx="20" cy="50" r="3" fill="oklch(0.577 0.245 27.325)"></circle>
+              <circle cx="20" cy="50" r="3" fill="none" stroke="oklch(0.577 0.245 27.325)" stroke-width="1" style="transform-box:fill-box; transform-origin:center; animation:pulseBlip 2s ease-out infinite;"></circle>
+              <circle cx="170" cy="160" r="3" fill="oklch(0.577 0.245 27.325)"></circle>
+              <circle cx="170" cy="160" r="3" fill="none" stroke="oklch(0.577 0.245 27.325)" stroke-width="1" style="transform-box:fill-box; transform-origin:center; animation:pulseBlip 2s ease-out infinite 0.6s;"></circle>
+              <g style="{{ orbitStyle }} transform-origin:100px 100px;">
+                <circle cx="100" cy="20" r="6" fill="{{ accentColor }}"></circle>
+                <line x1="100" y1="20" x2="100" y2="90" stroke="{{ accentColor }}" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2 2"></line>
+                <circle cx="30.7" cy="140" r="6" fill="{{ accentColor }}"></circle>
+                <line x1="30.7" y1="140" x2="90" y2="105" stroke="{{ accentColor }}" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2 2"></line>
+                <circle cx="169.3" cy="140" r="6" fill="{{ accentColor }}"></circle>
+                <line x1="169.3" y1="140" x2="110" y2="105" stroke="{{ accentColor }}" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="2 2"></line>
+              </g>
+              <circle cx="100" cy="100" r="10" fill="#DCD8D0"></circle>
+            </svg>
+          </div>
+          <div style="text-align:center; margin-top:8px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(16,32,24,0.35);">Perimeter control</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Risk Assessment -->
+        <div data-reveal data-reveal-delay="130" style="position:relative; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; border-radius:32px; background:#102018; padding:32px; height:400px; box-shadow:0 8px 30px rgba(16,32,24,0.2);">
+          <div style="position:relative; z-index:10; display:flex; flex-direction:column; justify-content:space-between; height:100%;">
+            <div>
+              <h3 style="font-family:'Inter',sans-serif; font-weight:700; font-size:20px; color:#DCD8D0; margin:0 0 8px 0;">Risk Assessment</h3>
+              <p style="font-family:'Inter',sans-serif; font-size:14px; color:rgba(220,216,208,0.7); line-height:1.6; margin:0;">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; padding:5px 12px; border-radius:999px; background:rgba(220,216,208,0.08); border:1px solid rgba(220,216,208,0.15); width:fit-content;">
+              <span style="width:6px; height:6px; border-radius:50%; background:oklch(0.577 0.245 27.325); display:inline-block; animation:liveDot 1.6s ease-in-out infinite;"></span>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:0.12em; color:#DCD8D0;">Live Feed</span>
+            </div>
+          </div>
+          <div style="position:absolute; bottom:0; right:0; width:100%; height:60%; overflow:hidden;">
+            <img src="assets/photo-aerial-city.jpg" alt="" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.4; filter:saturate(0.8);">
+            <div style="position:absolute; inset:0; background:linear-gradient(200deg, rgba(16,32,24,0) 30%, #102018 90%);"></div>
+            <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" style="position:absolute; inset:0; width:100%; height:100%;">
+              <circle cx="215" cy="75" r="3" fill="oklch(0.577 0.245 27.325)"></circle>
+              <circle cx="215" cy="75" r="4" fill="none" stroke="oklch(0.577 0.245 27.325)" stroke-width="1" style="transform-box:fill-box; transform-origin:center; animation:pulseBlip 2.4s ease-out infinite;"></circle>
+              <circle cx="215" cy="75" r="4" fill="none" stroke="oklch(0.577 0.245 27.325)" stroke-width="1" style="transform-box:fill-box; transform-origin:center; animation:pulseBlip 2.4s ease-out infinite 1.2s;"></circle>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Card 3: Secure Transport -->
+        <div data-reveal data-reveal-delay="260" style="position:relative; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; border-radius:32px; background:rgba(232,226,220,0.5); border:1px solid rgba(16,32,24,0.08); padding:32px; height:400px; box-shadow:0 2px 12px rgba(16,32,24,0.05);">
+          <div style="position:relative; z-index:10;">
+            <h3 style="font-family:'Inter',sans-serif; font-weight:700; font-size:20px; color:#102018; margin:0 0 8px 0;">Secure Transport</h3>
+            <p style="font-family:'Inter',sans-serif; font-size:14px; color:#2A4A38; line-height:1.6; margin:0;">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat.</p>
+          </div>
+          <div style="height:190px; width:100%; margin-top:32px; border-radius:20px; background:#102018; display:flex; justify-content:center; align-items:center;">
+            <svg viewBox="0 0 200 200" style="width:100%; height:100%; max-width:200px;">
+              <circle cx="120" cy="80" r="25" fill="oklch(0.577 0.245 27.325)" opacity="0.1"></circle>
+              <circle cx="60" cy="140" r="20" fill="oklch(0.577 0.245 27.325)" opacity="0.1"></circle>
+              <path d="M 20 180 Q 60 140 80 160 T 140 100 T 180 40" fill="none" stroke="#DCD8D0" stroke-width="1" stroke-dasharray="3 3" opacity="0.25"></path>
+              <path d="M 20 180 Q 40 100 100 80 T 180 40" fill="none" stroke="#DCD8D0" stroke-width="1" stroke-dasharray="3 3" opacity="0.25"></path>
+              <path d="{{ routePath }}" fill="none" stroke="{{ accentColor }}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="400" style="stroke-dashoffset:400; animation:dashFlow 4s ease-in-out infinite alternate;"></path>
+              <circle cx="20" cy="180" r="4" fill="#DCD8D0"></circle>
+              <circle cx="180" cy="40" r="4" fill="#DCD8D0"></circle>
+            </svg>
+          </div>
+          <div style="text-align:center; margin-top:8px;">
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(16,32,24,0.35);">Route integrity</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PHILOSOPHY ============ -->
+  <section data-screen-label="Philosophy" style="position:relative; width:100%; padding:140px 24px; overflow:hidden; background:#102018; color:#DCD8D0; display:flex; align-items:center; justify-content:center;">
+    <img src="assets/photo-concrete-texture.jpg" alt="" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.22; filter:saturate(0.6);">
+    <div style="position:relative; z-index:10; width:100%; max-width:1024px; display:flex; flex-direction:column; align-items:flex-start; gap:32px;">
+      <h2 data-reveal style="font-family:'Inter',sans-serif; font-weight:500; font-size:clamp(18px,2.4vw,26px); color:rgba(220,216,208,0.6); letter-spacing:0.01em; margin:0;">
+        Most security focuses on: standardized visible presence.
+      </h2>
+      <h3 data-reveal data-reveal-delay="180" style="font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(40px,8vw,112px); line-height:1.1; margin:0;">
+        We focus on: <span style="color:{{ accentColor }};">absolute discretion.</span>
+      </h3>
+    </div>
+  </section>
+
+  <!-- ============ PROTOCOL ============ -->
+  <section id="protocol" data-screen-label="Protocol" style="position:relative; width:100%; background:#DCD8D0; color:#102018;">
+    <div style="display:flex; flex-direction:column; align-items:center; gap:24px; padding:96px 24px 8px;">
+      <img src="assets/celtic-knot.png" alt="" aria-hidden="true" style="height:44px; width:min(90%, 560px); object-fit:contain; mix-blend-mode:multiply; opacity:0.55;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.2em; color:rgba(16,32,24,0.5);">The Protocol</span>
+    </div>
+    <sc-for list="{{ protocolSteps }}" as="step" hint-placeholder-count="3">
+      <div data-protocol-wrap style="position:sticky; top:{{ step.stickyTop }}; min-height:100dvh; width:100%; display:flex; align-items:flex-start; justify-content:center; padding:clamp(16px,3vw,40px);">
+        <div data-protocol-card style="position:relative; overflow:hidden; width:100%; max-width:1200px; min-height:78dvh; background:{{ step.bg }}; color:{{ step.ink }}; border-radius:40px; border:1px solid rgba(16,32,24,0.12); box-shadow:0 24px 60px rgba(16,32,24,0.28); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:48px; padding:clamp(32px,5vw,80px); transform-origin:center top; will-change:transform;">
+        <span style="position:absolute; top:36px; right:44px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.16em; color:{{ step.badge }};">{{ step.id }} — 03</span>
+        <div style="flex:1 1 380px; display:flex; flex-direction:column; gap:20px; max-width:480px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:700; color:{{ step.idColor }};">{{ step.id }}</span>
+          <h2 style="font-family:'Inter',sans-serif; font-size:clamp(32px,5vw,52px); font-weight:700; letter-spacing:-0.02em; margin:0;">{{ step.title }}</h2>
+          <p style="font-family:'JetBrains Mono',monospace; font-size:15px; color:{{ step.sub }}; line-height:1.7; max-width:420px; margin:0;">{{ step.desc }}</p>
+        </div>
+        <div style="flex:1 1 320px; display:flex; align-items:center; justify-content:center; min-height:320px;">
+          <sc-if value="{{ step.showRing }}" hint-placeholder-val="{{ true }}">
+            <svg viewBox="0 0 200 200" style="width:320px; height:320px; opacity:0.85;">
+              <circle cx="100" cy="100" r="90" fill="none" stroke="#102018" stroke-width="0.5" opacity="0.3"></circle>
+              <circle cx="100" cy="100" r="64" fill="none" stroke="#102018" stroke-width="0.5" stroke-dasharray="2 4" opacity="0.3"></circle>
+              <circle cx="100" cy="100" r="38" fill="none" stroke="#102018" stroke-width="0.5" opacity="0.3"></circle>
+              <line x1="100" y1="10" x2="100" y2="190" stroke="#102018" stroke-width="0.5" opacity="0.15"></line>
+              <line x1="10" y1="100" x2="190" y2="100" stroke="#102018" stroke-width="0.5" opacity="0.15"></line>
+              <g style="{{ radarSweepStyle }} transform-origin:100px 100px;">
+                <path d="M 100 100 L 100 10 A 90 90 0 0 1 163.6 36.4 Z" fill="{{ accentColor }}" opacity="0.18"></path>
+                <line x1="100" y1="100" x2="163.6" y2="36.4" stroke="{{ accentColor }}" stroke-width="1.5"></line>
+              </g>
+              <circle cx="138" cy="64" r="3" fill="oklch(0.577 0.245 27.325)"></circle>
+              <circle cx="138" cy="64" r="3" fill="none" stroke="oklch(0.577 0.245 27.325)" stroke-width="1" style="transform-box:fill-box; transform-origin:center; animation:pulseBlip 3s ease-out infinite;"></circle>
+              <circle cx="62" cy="132" r="3" fill="{{ accentColor }}"></circle>
+              <circle cx="62" cy="132" r="3" fill="none" stroke="{{ accentColor }}" stroke-width="1" style="transform-box:fill-box; transform-origin:center; animation:pulseBlip 3s ease-out infinite 1.5s;"></circle>
+              <circle cx="100" cy="100" r="5" fill="#102018"></circle>
+            </svg>
+          </sc-if>
+          <sc-if value="{{ step.showBio }}" hint-placeholder-val="{{ false }}">
+            <svg viewBox="0 0 200 200" style="width:320px; height:320px; opacity:0.75;">
+              <defs>
+                <linearGradient id="fpScanGlow" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="{{ step.hi }}" stop-opacity="0"></stop>
+                  <stop offset="50%" stop-color="{{ step.hi }}" stop-opacity="0.55"></stop>
+                  <stop offset="100%" stop-color="{{ step.hi }}" stop-opacity="0"></stop>
+                </linearGradient>
+              </defs>
+              <circle cx="100" cy="100" r="72" fill="none" stroke="{{ step.ink }}" stroke-width="0.5" stroke-dasharray="2 3" opacity="0.25"></circle>
+              <g style="--fp-base:{{ step.ink }}; --flash-color:{{ step.hi }}; animation:fpFlash 3.2s ease-in-out infinite; transform-box:fill-box; transform-origin:center;" fill="none" stroke="{{ step.ink }}" stroke-width="1.5" stroke-linecap="round">
+                <path d="M 85 60 C 95 55 105 55 115 60"></path>
+                <path d="M 73 75 C 88 63 112 63 127 75"></path>
+                <path d="M 65 92 C 82 75 118 75 135 92"></path>
+                <path d="M 60 110 C 78 88 122 88 140 110"></path>
+                <path d="M 65 128 C 82 105 118 105 135 128"></path>
+                <path d="M 73 143 C 88 125 112 125 127 143"></path>
+                <path d="M 85 155 C 95 140 105 140 115 155"></path>
+              </g>
+              <g style="animation:fpScan 3.2s ease-in-out infinite; transform-box:fill-box; transform-origin:center;">
+                <rect x="58" y="88" width="84" height="24" fill="url(#fpScanGlow)"></rect>
+                <line x1="58" y1="100" x2="142" y2="100" stroke="{{ step.hi }}" stroke-width="2"></line>
+              </g>
+              <circle cx="100" cy="100" r="3" fill="{{ step.hi }}" opacity="0.85"></circle>
+            </svg>
+          </sc-if>
+          <sc-if value="{{ step.showAperture }}" hint-placeholder-val="{{ false }}">
+            <svg viewBox="0 0 200 200" style="width:320px; height:320px; opacity:0.8;">
+              <circle cx="100" cy="100" r="95" fill="none" stroke="{{ step.ink }}" stroke-width="1" opacity="0.2"></circle>
+              <line x1="100" y1="10" x2="100" y2="40" stroke="{{ step.ink }}" stroke-width="1" opacity="0.45"></line>
+              <line x1="100" y1="160" x2="100" y2="190" stroke="{{ step.ink }}" stroke-width="1" opacity="0.45"></line>
+              <line x1="10" y1="100" x2="40" y2="100" stroke="{{ step.ink }}" stroke-width="1" opacity="0.45"></line>
+              <line x1="160" y1="100" x2="190" y2="100" stroke="{{ step.ink }}" stroke-width="1" opacity="0.45"></line>
+              <g style="{{ orbitStyle }} transform-origin:center;">
+                <circle cx="100" cy="100" r="70" fill="none" stroke="{{ step.ink }}" stroke-width="0.5" stroke-dasharray="10 5 2 5"></circle>
+              </g>
+              <g style="{{ orbitRevStyle }} transform-origin:center;">
+                <circle cx="100" cy="100" r="60" fill="none" stroke="{{ step.ink }}" stroke-width="1" stroke-dasharray="30 10" opacity="0.6"></circle>
+              </g>
+              <g style="{{ breatheStyle }} transform-origin:center;">
+                <circle cx="100" cy="100" r="45" fill="none" stroke="{{ step.hi }}" stroke-width="2" opacity="0.85"></circle>
+                <path d="M 100 55 L 120 70 L 100 100 Z" fill="{{ step.ink }}" opacity="0.1"></path>
+                <path d="M 145 100 L 120 120 L 100 100 Z" fill="{{ step.ink }}" opacity="0.1"></path>
+                <path d="M 100 145 L 80 120 L 100 100 Z" fill="{{ step.ink }}" opacity="0.1"></path>
+                <path d="M 55 100 L 80 70 L 100 100 Z" fill="{{ step.ink }}" opacity="0.1"></path>
+              </g>
+              <circle cx="100" cy="100" r="3" fill="oklch(0.577 0.245 27.325)" style="{{ jitterStyle }}"></circle>
+            </svg>
+          </sc-if>
+        </div>
+        </div>
+      </div>
+    </sc-for>
+  </section>
+
+  <!-- ============ TAGLINE / BRAND STATEMENT ============ -->
+  <section data-screen-label="Tagline" style="position:relative; width:100%; min-height:60vh; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#0a120d;">
+    <img src="assets/photo-control-room.jpg" alt="" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 30%; opacity:0.55; filter:saturate(0.8) brightness(0.85);">
+    <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(10,18,13,0.8) 0%, rgba(10,18,13,0.35) 45%, rgba(10,18,13,0.88) 100%);"></div>
+    <div data-reveal style="position:relative; z-index:10; text-align:center; padding:100px 24px; max-width:900px;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:{{ accentColor }}; display:block; margin-bottom:28px;">Our Standard</span>
+      <h2 style="font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(34px,6.4vw,84px); color:#F5F2EE; margin:0; line-height:1.15;">Security without compromise.</h2>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" data-screen-label="Contact" style="position:relative; width:100%; background:#102018; color:#F5F2EE; padding:96px 24px; overflow:hidden;">
+    <div style="max-width:1280px; margin:0 auto; position:relative; z-index:10;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px,1fr)); gap:64px;">
+
+        <div data-reveal style="display:flex; flex-direction:column;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.2em; color:{{ accentColor }}; margin-bottom:24px;">Initiate Contact</span>
+          <h2 style="font-family:'Inter',sans-serif; font-weight:700; font-size:clamp(32px,5vw,52px); letter-spacing:-0.02em; margin:0 0 28px 0;">
+            Confidentiality<br>
+            <span style="font-family:'Playfair Display',serif; font-style:italic; color:rgba(245,242,238,0.55); font-size:1.1em;">from the first word.</span>
+          </h2>
+          <p style="font-family:'JetBrains Mono',monospace; font-size:14px; color:rgba(245,242,238,0.7); max-width:440px; line-height:1.7; margin:0 0 48px 0;">
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+
+          <div style="display:flex; flex-direction:column; gap:28px; margin-top:auto;">
+            <sc-for list="{{ contactMethods }}" as="method" hint-placeholder-count="3">
+              <div style="display:flex; align-items:center; gap:16px;">
+                <div style="width:48px; height:48px; border-radius:50%; border:1px solid rgba(245,242,238,0.2); display:flex; align-items:center; justify-content:center; background:rgba(245,242,238,0.05); flex-shrink:0;">
+                  <span style="font-size:18px;">{{ method.icon }}</span>
+                </div>
+                <div style="display:flex; flex-direction:column;">
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:rgba(245,242,238,0.5); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:4px;">{{ method.label }}</span>
+                  <span style="font-family:'Inter',sans-serif; font-weight:500; font-size:18px;">{{ method.value }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div data-reveal data-reveal-delay="150" style="background:rgba(245,242,238,0.04); border:1px solid rgba(245,242,238,0.1); padding:40px; border-radius:32px; position:relative; overflow:hidden;">
+          <form style="position:relative; z-index:10; display:flex; flex-direction:column; gap:24px;" onSubmit="{{ handleSubmit }}">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <label style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(245,242,238,0.5); padding-left:8px;">Identifier</label>
+              <input type="text" placeholder="Name or Callsign" style="width:100%; background:rgba(245,242,238,0.05); border:1px solid rgba(245,242,238,0.1); border-radius:12px; padding:12px 16px; font-size:14px; font-family:'Inter',sans-serif; color:#F5F2EE;">
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <label style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(245,242,238,0.5); padding-left:8px;">Comms Relay</label>
+              <input type="email" placeholder="Email Address" style="width:100%; background:rgba(245,242,238,0.05); border:1px solid rgba(245,242,238,0.1); border-radius:12px; padding:12px 16px; font-size:14px; font-family:'Inter',sans-serif; color:#F5F2EE;">
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <label style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(245,242,238,0.5); padding-left:8px;">Nature of Request</label>
+              <textarea rows="4" placeholder="Provide minimal necessary details..." style="width:100%; background:rgba(245,242,238,0.05); border:1px solid rgba(245,242,238,0.1); border-radius:12px; padding:12px 16px; font-size:14px; font-family:'Inter',sans-serif; color:#F5F2EE; resize:none;"></textarea>
+            </div>
+            <button type="submit" style="margin-top:8px; border:none; cursor:pointer; border-radius:999px; background:{{ accentColor }}; padding:16px 32px; font-family:'JetBrains Mono',monospace; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#F5F2EE; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <span>Transmit Request</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer data-screen-label="Footer" style="position:relative; width:100%; background:#0a120d; color:#F5F2EE; border-top:1px solid rgba(245,242,238,0.1); padding:48px 24px;">
+    <div style="max-width:1280px; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:32px;">
+      <div style="display:flex; flex-direction:column; align-items:flex-start; gap:16px;">
+        <img src="assets/shield-and-name-footer.svg" alt="INOR Security" style="height:72px; width:auto; object-fit:contain;">
+        <p style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(245,242,238,0.4); margin:0;">© {{ year }} INOR Security. All rights reserved.</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:32px;">
+        <a href="#" style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(245,242,238,0.6); text-decoration:none;">Privacy Protocol</a>
+        <a href="#" style="font-family:'JetBrains Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(245,242,238,0.6); text-decoration:none;">Terms of Engagement</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1440},
+  &quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#2A4A38&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#2A4A38&quot;, &quot;#4A2A32&quot;, &quot;#1F2A44&quot;, &quot;#4A3A20&quot;], &quot;section&quot;: &quot;Theme&quot;},
+  &quot;motionEnabled&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;},
+  &quot;cursorEnabled&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;},
+  &quot;showDividers&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot;}
+}">
+
+class Component extends DCLogic {
+  state = { scrolled: false };
+
+  componentDidMount() {
+    this._onScroll = () => {
+      const isScrolled = window.scrollY > 40;
+      if (isScrolled !== this.state.scrolled) this.setState({ scrolled: isScrolled });
+      this._updateProtocolStack();
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._updateProtocolStack();
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- Custom cursor ---
+    if ((this.props.cursorEnabled ?? true) && window.matchMedia('(pointer:fine)').matches && !reduced) {
+      this._mx = -100; this._my = -100; this._rx = -100; this._ry = -100; this._rs = 1; this._hover = false;
+      this._onMove = (e) => { this._mx = e.clientX; this._my = e.clientY; };
+      this._onOver = (e) => {
+        this._hover = !!(e.target && e.target.closest && e.target.closest('a,button,input,textarea'));
+      };
+      window.addEventListener('mousemove', this._onMove, { passive: true });
+      window.addEventListener('mouseover', this._onOver, { passive: true });
+      const tick = () => {
+        this._raf = requestAnimationFrame(tick);
+        const dot = this._cursorDot, ring = this._cursorRing;
+        if (!dot || !ring) return;
+        this._rx += (this._mx - this._rx) * 0.16;
+        this._ry += (this._my - this._ry) * 0.16;
+        const targetScale = this._hover ? 1.7 : 1;
+        this._rs += (targetScale - this._rs) * 0.2;
+        dot.style.transform = 'translate(' + (this._mx - 4) + 'px,' + (this._my - 4) + 'px)';
+        ring.style.transform = 'translate(' + (this._rx - 18) + 'px,' + (this._ry - 18) + 'px) scale(' + this._rs.toFixed(3) + ')';
+      };
+      tick();
+    }
+
+    // --- Scroll reveals ---
+    if (!reduced && this._root) {
+      const els = this._root.querySelectorAll('[data-reveal]');
+      els.forEach((el) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(72px) scale(0.96)';
+        el.style.filter = 'blur(8px)';
+        el.style.transition = 'opacity 1.1s cubic-bezier(0.22,1,0.36,1), transform 1.1s cubic-bezier(0.22,1,0.36,1), filter 1.1s cubic-bezier(0.22,1,0.36,1)';
+        el.style.transitionDelay = (el.getAttribute('data-reveal-delay') || '0') + 'ms';
+      });
+      this._io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (en.isIntersecting) {
+            en.target.style.opacity = '1';
+            en.target.style.transform = 'translateY(0) scale(1)';
+            en.target.style.filter = 'none';
+            this._io.unobserve(en.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      els.forEach((el) => this._io.observe(el));
+    }
+  }
+
+  _updateProtocolStack() {
+    if (!this._root) return;
+    const wraps = this._root.querySelectorAll('[data-protocol-wrap]');
+    const vh = window.innerHeight || 1;
+    const clamp01 = (v) => Math.min(1, Math.max(0, v));
+    wraps.forEach((wrap, i) => {
+      const card = wrap.querySelector('[data-protocol-card]');
+      if (!card) return;
+      // Recede as the next card covers this one
+      let scale = 1, ty = 0, dim = 0;
+      const next = wraps[i + 1];
+      if (next) {
+        const p = clamp01(1 - next.getBoundingClientRect().top / vh);
+        scale = 1 - p * 0.1;
+        ty = -p * 26;
+        dim = p;
+      }
+      // Slight tilt while this card is sliding in
+      let rot = 0;
+      if (i > 0) {
+        const q = clamp01(wrap.getBoundingClientRect().top / vh);
+        rot = q * 2;
+      }
+      card.style.transform = 'scale(' + scale.toFixed(4) + ') translateY(' + ty.toFixed(1) + 'px) rotate(' + rot.toFixed(2) + 'deg)';
+      card.style.filter = dim ? 'brightness(' + (1 - dim * 0.35).toFixed(3) + ') saturate(' + (1 - dim * 0.3).toFixed(3) + ')' : '';
+    });
+  }
+
+  componentWillUnmount() {
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._onMove) window.removeEventListener('mousemove', this._onMove);
+    if (this._onOver) window.removeEventListener('mouseover', this._onOver);
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._io) this._io.disconnect();
+  }
+
+  setRootRef = (el) => {
+    this._root = el;
+  };
+
+  setCursorDotRef = (el) => {
+    this._cursorDot = el;
+  };
+
+  setCursorRingRef = (el) => {
+    this._cursorRing = el;
+  };
+
+  renderVals() {
+    const accentColor = this.props.accentColor ?? '#2A4A38';
+    const motionEnabled = this.props.motionEnabled ?? true;
+    const showDividers = this.props.showDividers ?? true;
+    const scrolled = this.state.scrolled;
+
+    const navStyle = [
+      'pointer-events:auto',
+      'display:flex',
+      'align-items:center',
+      'justify-content:space-between',
+      'gap:24px',
+      'border-radius:32px',
+      'padding:12px 24px',
+      'width:100%',
+      'max-width:900px',
+      'transition:all 400ms ease',
+      scrolled
+        ? 'background:rgba(220,216,208,0.85); backdrop-filter:blur(20px); border:1px solid rgba(16,32,24,0.1); color:#102018; box-shadow:0 8px 24px rgba(16,32,24,0.12);'
+        : 'background:transparent; border:1px solid transparent; color:#F5F2EE;',
+    ].join(';');
+
+    const navLogoStyle = [
+      'height:52px',
+      'width:auto',
+      'object-fit:contain',
+      'transition:filter 400ms ease',
+      scrolled ? 'filter:none' : 'filter:brightness(0) invert(1)',
+    ].join(';');
+
+    const navCtaStyle = [
+      'padding:10px 22px',
+      'border-radius:999px',
+      "font-family:'JetBrains Mono',monospace",
+      'font-size:12px',
+      'text-transform:uppercase',
+      'letter-spacing:0.12em',
+      'text-decoration:none',
+      'font-weight:600',
+      'pointer-events:auto',
+      'transition:all 300ms ease',
+      scrolled ? 'background:#102018; color:#F5F2EE;' : 'background:#F5F2EE; color:#102018;',
+    ].join(';');
+
+    const heroCtaStyle = [
+      'margin-top:44px',
+      'display:inline-flex',
+      'align-items:center',
+      'justify-content:center',
+      'border-radius:999px',
+      `background:${accentColor}`,
+      'padding:16px 34px',
+      "font-family:'JetBrains Mono',monospace",
+      'font-size:14px',
+      'text-transform:uppercase',
+      'letter-spacing:0.14em',
+      'color:#F5F2EE',
+      'text-decoration:none',
+      'font-weight:600',
+      'width:fit-content',
+      'transition:transform 300ms ease',
+    ].join(';');
+
+
+
+    const heroIslandStyle = [
+      'position:absolute',
+      'right:6%',
+      'top:50%',
+      'transform:translateY(-50%)',
+      'z-index:6',
+      'width:min(40vw, 560px)',
+      'height:min(40vw, 560px)',
+      'display:flex',
+      'align-items:center',
+      'justify-content:center',
+      'pointer-events:none',
+    ].join(';');
+
+    const ringAnimStyle1 = motionEnabled
+      ? 'opacity:0; animation:heartbeatRing 6.5s ease-out infinite;'
+      : 'display:none;';
+
+    const ringAnimStyle2 = motionEnabled
+      ? 'opacity:0; animation:heartbeatRing 6.5s ease-out infinite 3.25s;'
+      : 'display:none;';
+
+    const heroShieldColor = accentColor;
+
+    const heroShieldTintStyle = [
+      'position:relative',
+      'z-index:1',
+      'flex-shrink:0',
+      'filter:drop-shadow(0 10px 26px rgba(0,0,0,0.5))',
+      motionEnabled ? 'animation:heartbeatPulse 3.6s ease-in-out infinite' : '',
+    ].join(';') + ';';
+
+    const accentGlowStyle = [
+      'position:absolute',
+      'top:0',
+      'right:0',
+      'width:800px',
+      'height:800px',
+      `background:${accentColor}0d`,
+      'border-radius:50%',
+      'filter:blur(90px)',
+      'transform:translate(33%, -50%)',
+      'pointer-events:none',
+    ].join(';');
+
+    const radarSweepStyle = motionEnabled ? 'animation:spin360 4.5s linear infinite;' : '';
+    const orbitStyle = motionEnabled ? 'animation:spin360 16s linear infinite;' : '';
+    const orbitRevStyle = motionEnabled ? 'animation:spinRev360 13s linear infinite;' : '';
+    const breatheStyle = motionEnabled ? 'animation:breathe 3s ease-in-out infinite;' : '';
+    const jitterStyle = motionEnabled ? 'animation:trackJitter 2.4s ease-in-out infinite;' : '';
+    const motionAnimStyle = motionEnabled ? 'animation:spin360 30s linear infinite;' : '';
+
+    return {
+      setRootRef: this.setRootRef,
+      setCursorDotRef: this.setCursorDotRef,
+      setCursorRingRef: this.setCursorRingRef,
+      cursorOn: (this.props.cursorEnabled ?? true),
+      radarSweepStyle,
+      navStyle,
+      navLogoStyle,
+      navCtaStyle,
+      heroCtaStyle,
+      heroIslandStyle,
+      ringAnimStyle1,
+      ringAnimStyle2,
+      heroShieldTintStyle,
+      heroShieldColor,
+      accentGlowStyle,
+      accentColor,
+      showDividers,
+      orbitStyle,
+      orbitRevStyle,
+      breatheStyle,
+      jitterStyle,
+      motionAnimStyle,
+      routePath: 'M 20 180 L 40 160 L 80 165 L 100 130 L 150 140 L 180 40',
+      year: new Date().getFullYear(),
+      handleSubmit: (e) => e.preventDefault(),
+      protocolSteps: [
+        { id: '01', title: 'Reconnaissance', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.', showRing: true, showBio: false, showAperture: false,
+          bg: '#E8E4DC', ink: '#102018', sub: '#2A4A38', idColor: accentColor, badge: 'rgba(16,32,24,0.35)', hi: accentColor, stickyTop: '24px' },
+        { id: '02', title: 'Implementation', desc: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.', showRing: false, showBio: true, showAperture: false,
+          bg: accentColor, ink: '#F5F2EE', sub: 'rgba(245,242,238,0.75)', idColor: 'rgba(245,242,238,0.9)', badge: 'rgba(245,242,238,0.4)', hi: '#F5F2EE', stickyTop: '44px' },
+        { id: '03', title: 'Constant Watch', desc: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', showRing: false, showBio: false, showAperture: true,
+          bg: '#DCD8D0', ink: '#102018', sub: '#2A4A38', idColor: accentColor, badge: 'rgba(16,32,24,0.35)', hi: accentColor, stickyTop: '64px' },
+      ],
+      contactMethods: [
+        { icon: '\u260E', label: 'Secure Line', value: '+44 (0) 20 7123 4567' },
+        { icon: '\u2709', label: 'Encrypted Comms', value: 'operations@inorsecurity.com' },
+        { icon: '\u2316', label: 'Headquarters', value: 'Mayfair, London, UK' },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>
