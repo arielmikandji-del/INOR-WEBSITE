@@ -1,0 +1,239 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-inter);
+  --font-drama: var(--font-playfair);
+  --font-mono: var(--font-jetbrains);
+
+  /* INOR brand tokens (sampled from business card) */
+  --color-ink: #102018;
+  --color-ink-light: #1A3328;
+  --color-ink-mid: #2A4A38;
+  --color-cream: #DCD8D0;
+  --color-cream-light: #E8E2DC;
+  --color-warm-white: #F5F2EE;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* Brand surface defaults: cream page, ink text */
+  --background: #DCD8D0;
+  --foreground: #102018;
+  --card: #E8E2DC;
+  --card-foreground: #102018;
+  --popover: #E8E2DC;
+  --popover-foreground: #102018;
+  --primary: #102018;
+  --primary-foreground: #F5F2EE;
+  --secondary: #E8E2DC;
+  --secondary-foreground: #102018;
+  --muted: #E8E2DC;
+  --muted-foreground: #2A4A38;
+  --accent: #2A4A38; /* README/prototype brand accent (deep green) */
+  --accent-foreground: #F5F2EE;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: rgba(16, 32, 24, 0.12);
+  --input: rgba(16, 32, 24, 0.12);
+  --ring: #2A4A38;
+  --chart-1: #102018;
+  --chart-2: #1A3328;
+  --chart-3: #2A4A38;
+  --chart-4: #DCD8D0;
+  --chart-5: #E8E2DC;
+  --radius: 0.5rem;
+  --sidebar: #E8E2DC;
+  --sidebar-foreground: #102018;
+  --sidebar-primary: #102018;
+  --sidebar-primary-foreground: #F5F2EE;
+  --sidebar-accent: #2A4A38;
+  --sidebar-accent-foreground: #F5F2EE;
+  --sidebar-border: rgba(16, 32, 24, 0.12);
+  --sidebar-ring: #2A4A38;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans antialiased;
+    background: var(--color-ink);
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "kern", "liga", "calt";
+  }
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-cream);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Motion: spotlight reveal, 3D shield float, mouse-parallax
+   Respect prefers-reduced-motion in components, not here.
+   ────────────────────────────────────────────────────────────── */
+@keyframes spotlight {
+  0%   { opacity: 0; transform: translate(-72%, -62%) scale(0.5); }
+  100% { opacity: 1; transform: translate(-50%, -40%) scale(1); }
+}
+.animate-spotlight {
+  animation: spotlight 2400ms cubic-bezier(0.22, 1, 0.36, 1) 400ms 1 forwards;
+}
+
+@keyframes shield-float {
+  0%, 100% { transform: translateY(0) rotateZ(0); }
+  50%      { transform: translateY(-6px) rotateZ(0.4deg); }
+}
+
+@keyframes hairline-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Prototype keyframes (ground truth: INOR Security.dc.html).
+   Decorative SVG/brand motion is gated in JS via useMotionEnabled()
+   which respects prefers-reduced-motion; the media query below is a
+   belt-and-suspenders safety net.
+   ────────────────────────────────────────────────────────────── */
+@keyframes shieldFloat { 0%,100% { transform: translateY(0) rotateZ(0deg); } 50% { transform: translateY(-10px) rotateZ(0.5deg); } }
+@keyframes spin360 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes spinRev360 { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+@keyframes pulseBlip { 0% { transform: scale(1); opacity: 0.9; } 100% { transform: scale(2.1); opacity: 0; } }
+@keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(0.86); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes liveDot { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+@keyframes trackJitter { 0% { transform: translate(0,0); } 25% { transform: translate(5px,-4px); } 50% { transform: translate(-4px,3px); } 75% { transform: translate(3px,4px); } 100% { transform: translate(0,0); } }
+@keyframes dashFlow { to { stroke-dashoffset: 0; } }
+@keyframes knotDraw { to { stroke-dashoffset: 0; } }
+@keyframes fpScan { 0% { transform: translateY(-46px); opacity: 0; } 10% { opacity: 1; } 45% { transform: translateY(46px); opacity: 1; } 55% { opacity: 0; } 100% { transform: translateY(46px); opacity: 0; } }
+@keyframes fpFlash { 0%, 38%, 62%, 100% { stroke: var(--fp-base, #102018); } 48% { stroke: var(--flash-color, #2A4A38); } }
+@keyframes heartbeatPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.018); } }
+@keyframes heartbeatRing { 0% { transform: translate(-50%,-50%) scale(0.9); opacity: 0.28; } 100% { transform: translate(-50%,-50%) scale(1.4); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-spotlight,
+  .shield-float-anim {
+    animation: none !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism over dark green hero */
+  .glass-dark {
+    background: rgba(26, 51, 40, 0.25);
+    border: 1px solid rgba(220, 216, 208, 0.15);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  /* Glassmorphism over cream services */
+  .glass-light {
+    background: rgba(232, 226, 220, 0.6);
+    border: 1px solid rgba(16, 32, 24, 0.1);
+    backdrop-filter: blur(12px) saturate(110%);
+    -webkit-backdrop-filter: blur(12px) saturate(110%);
+    box-shadow: 0 4px 24px rgba(16, 32, 24, 0.06);
+  }
+  .tracking-emblem {
+    letter-spacing: 0.25em;
+  }
+  .tracking-wider-2 {
+    letter-spacing: 0.18em;
+  }
+  /* Tint dark shield artwork toward cream + emboss with drop-shadows */
+  .shield-tint-cream {
+    filter:
+      brightness(0) saturate(100%)
+      invert(93%) sepia(8%) saturate(140%) hue-rotate(15deg) brightness(96%) contrast(90%)
+      drop-shadow(0 10px 24px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.08));
+  }
+  .shield-shadow {
+    filter:
+      drop-shadow(0 8px 24px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 1px 0 rgba(220, 216, 208, 0.15));
+  }
+  /* Subtle Celtic knot texture using inline SVG */
+  /* 3D shield container — scene + perspective */
+  .scene-3d {
+    perspective: 1400px;
+    transform-style: preserve-3d;
+  }
+  .shield-3d {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .shield-float-anim {
+    animation: shield-float 8s ease-in-out infinite;
+  }
+  /* Backplate disc behind the shield, lit from above */
+  .shield-backplate {
+    background:
+      radial-gradient(circle at 50% 35%, rgba(220,216,208,0.16) 0%, rgba(220,216,208,0.04) 38%, transparent 65%),
+      radial-gradient(circle at 50% 75%, rgba(0,0,0,0.45) 0%, transparent 60%);
+  }
+  .editorial-grid {
+    background-image:
+      linear-gradient(rgba(220,216,208,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(220,216,208,0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  .celtic-texture {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><g fill='none' stroke='%23DCD8D0' stroke-width='0.6'><circle cx='100' cy='100' r='38'/><circle cx='100' cy='100' r='52'/><path d='M100 48 L152 100 L100 152 L48 100 Z'/><path d='M62 62 L138 138 M138 62 L62 138'/></g></svg>");
+    background-size: 240px 240px;
+    background-repeat: repeat;
+    opacity: 0.04;
+  }
+}
