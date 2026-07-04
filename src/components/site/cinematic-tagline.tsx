@@ -49,6 +49,18 @@ export function CinematicTagline() {
         >
           Security without compromise.
         </h2>
+        <p
+          className="mx-auto mt-9 max-w-[640px] font-mono text-sm"
+          style={{
+            color: "rgba(245,242,238,0.65)",
+            lineHeight: 1.75,
+            letterSpacing: "0.02em",
+          }}
+        >
+          Founded by operators with over two decades in military and
+          counterterrorism policing, and eight years of close protection in
+          hostile environments across Africa and the Middle East.
+        </p>
       </Reveal>
     </section>
   );

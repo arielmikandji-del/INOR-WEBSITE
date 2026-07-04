@@ -1,13 +1,31 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import { Reveal } from "./reveal";
 
 const ACCENT = "#2A4A38";
 
-const CONTACT_METHODS = [
-  { icon: "☎", label: "Secure Line", value: "+44 (0) 20 7123 4567" },
-  { icon: "✉", label: "Encrypted Comms", value: "operations@inorsecurity.com" },
-  { icon: "⌖", label: "Headquarters", value: "Mayfair, London, UK" },
+const CONTACT_METHODS: {
+  icon: string;
+  label: string;
+  value: string;
+  href?: string;
+  note?: string;
+}[] = [
+  {
+    icon: "✉",
+    label: "Enquiries",
+    value: "operations@inor.uk",
+    href: "mailto:operations@inor.uk",
+  },
+  {
+    icon: "⚑",
+    label: "Careers",
+    value: "operations@inor.uk",
+    href: "mailto:operations@inor.uk?subject=Careers%20Application",
+    note: "Send your CV",
+  },
+  { icon: "◷", label: "Response", value: "Within one business day" },
 ];
 
 const inputStyle: React.CSSProperties = {
@@ -28,10 +46,11 @@ const labelStyle: React.CSSProperties = {
 
 /**
  * Contact (ground truth: INOR Security.dc.html).
- * Two columns — info + glass form panel — on a dark ground. Left reveals at 0ms,
+ * Two columns - info + glass form panel - on a dark ground. Left reveals at 0ms,
  * right column delayed 150ms.
  */
 export function CinematicContact() {
+  const reduce = useReducedMotion();
   return (
     <section
       id="contact"
@@ -42,7 +61,7 @@ export function CinematicContact() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(360px,1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px),1fr))",
             gap: "64px",
           }}
         >
@@ -71,37 +90,64 @@ export function CinematicContact() {
               className="m-0 mb-12 max-w-[440px] font-mono text-sm"
               style={{ color: "rgba(245,242,238,0.7)", lineHeight: 1.7 }}
             >
-              Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-              officia deserunt mollit anim id est laborum.
+              Every enquiry is handled in strict confidence. Share only what you
+              are comfortable putting in writing. A member of our team will
+              respond discreetly to arrange a secure conversation.
             </p>
 
             <div className="mt-auto flex flex-col gap-7">
-              {CONTACT_METHODS.map((m) => (
-                <div key={m.label} className="flex items-center gap-4">
-                  <div
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full"
-                    style={{
-                      border: "1px solid rgba(245,242,238,0.2)",
-                      background: "rgba(245,242,238,0.05)",
-                    }}
-                  >
-                    <span style={{ fontSize: "18px" }}>{m.icon}</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span
-                      className="mb-1 font-mono text-[11px] uppercase"
-                      style={{ color: "rgba(245,242,238,0.5)", letterSpacing: "0.12em" }}
+              {CONTACT_METHODS.map((m) => {
+                const body = (
+                  <>
+                    <div
+                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-colors duration-300 group-hover:border-[rgba(245,242,238,0.45)]"
+                      style={{
+                        border: "1px solid rgba(245,242,238,0.2)",
+                        background: "rgba(245,242,238,0.05)",
+                      }}
                     >
-                      {m.label}
-                    </span>
-                    <span className="font-sans text-lg font-medium">{m.value}</span>
+                      <span style={{ fontSize: "18px" }}>{m.icon}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span
+                        className="mb-1 font-mono text-[11px] uppercase"
+                        style={{ color: "rgba(245,242,238,0.5)", letterSpacing: "0.12em" }}
+                      >
+                        {m.label}
+                      </span>
+                      <span className="font-sans text-lg font-medium transition-colors duration-300 group-hover:text-white">
+                        {m.value}
+                      </span>
+                      {m.note && (
+                        <span
+                          className="font-mono text-[11px] uppercase"
+                          style={{ color: ACCENT, letterSpacing: "0.1em" }}
+                        >
+                          {m.note}
+                        </span>
+                      )}
+                    </div>
+                  </>
+                );
+                return m.href ? (
+                  <a
+                    key={m.label}
+                    href={m.href}
+                    className="group flex items-center gap-4 no-underline"
+                    style={{ color: "inherit" }}
+                  >
+                    {body}
+                  </a>
+                ) : (
+                  <div key={m.label} className="group flex items-center gap-4">
+                    {body}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </Reveal>
 
-          {/* Right column — form */}
+          {/* Right column - form */}
           <Reveal
             delay={150}
             className="relative overflow-hidden"
@@ -149,9 +195,12 @@ export function CinematicContact() {
                   style={{ ...inputStyle, resize: "none" }}
                 />
               </div>
-              <button
+              <motion.button
                 type="submit"
-                className="mt-2 flex cursor-pointer items-center justify-between rounded-full font-mono text-xs uppercase text-[#F5F2EE]"
+                whileHover={reduce ? undefined : { scale: 1.02 }}
+                whileTap={reduce ? undefined : { scale: 0.98 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="group mt-2 flex cursor-pointer items-center justify-between rounded-full font-mono text-xs uppercase text-[#F5F2EE]"
                 style={{
                   border: "none",
                   background: ACCENT,
@@ -161,8 +210,13 @@ export function CinematicContact() {
                 }}
               >
                 <span>Transmit Request</span>
-                <span aria-hidden>→</span>
-              </button>
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </motion.button>
             </form>
           </Reveal>
         </div>

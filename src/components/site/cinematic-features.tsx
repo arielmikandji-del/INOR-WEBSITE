@@ -1,18 +1,24 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import { Reveal } from "./reveal";
+import { ServicesIndex } from "./services-index";
 import { useMotionEnabled } from "@/lib/use-motion";
 
 const ACCENT = "#2A4A38";
 const RED = "oklch(0.577 0.245 27.325)";
+const EASE = [0.22, 1, 0.36, 1] as const;
+/** Quiet, confident hover lift for cards - no bounce. */
+const cardHover = { y: -6, transition: { duration: 0.4, ease: EASE } };
 
 /**
  * Core Capabilities / Services (ground truth: INOR Security.dc.html).
  * Light-stone section, 3-card auto-fit grid. Cards reveal with 0/130/260ms
  * stagger. Each card carries a bespoke animated SVG (radar/orbit, live-feed
- * aerial, dashed route) — all decorative motion gated behind reduced-motion.
+ * aerial, dashed route) - all decorative motion gated behind reduced-motion.
  */
 export function CinematicFeatures() {
+  const reduce = useReducedMotion();
   return (
     <section
       id="services"
@@ -67,7 +73,8 @@ export function CinematicFeatures() {
         >
           {/* Card 1: Executive Protection */}
           <Reveal delay={0}>
-            <article
+            <motion.article
+              whileHover={reduce ? undefined : cardHover}
               className="relative flex h-[400px] flex-col justify-between overflow-hidden rounded-[32px] p-8"
               style={{
                 background: "rgba(232,226,220,0.5)",
@@ -77,14 +84,14 @@ export function CinematicFeatures() {
             >
               <div className="relative z-10">
                 <h3 className="m-0 mb-2 font-sans text-xl font-bold text-[#102018]">
-                  Executive Protection
+                  Close Protection
                 </h3>
                 <p
                   className="m-0 font-sans text-sm"
                   style={{ color: "#2A4A38", lineHeight: 1.6 }}
                 >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt.
+                  Vetted officers for principals in elevated-risk environments,
+                  at home, in transit, or overseas.
                 </p>
               </div>
               <div
@@ -101,26 +108,27 @@ export function CinematicFeatures() {
                   Perimeter control
                 </span>
               </div>
-            </article>
+            </motion.article>
           </Reveal>
 
           {/* Card 2: Risk Assessment */}
           <Reveal delay={130}>
-            <article
+            <motion.article
+              whileHover={reduce ? undefined : cardHover}
               className="relative flex h-[400px] flex-col justify-between overflow-hidden rounded-[32px] p-8"
               style={{ background: "#102018", boxShadow: "0 8px 30px rgba(16,32,24,0.2)" }}
             >
               <div className="relative z-10 flex h-full flex-col justify-between">
                 <div>
                   <h3 className="m-0 mb-2 font-sans text-xl font-bold text-[#DCD8D0]">
-                    Risk Assessment
+                    Surveillance
                   </h3>
                   <p
                     className="m-0 font-sans text-sm"
                     style={{ color: "rgba(220,216,208,0.7)", lineHeight: 1.6 }}
                   >
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip.
+                    Discreet observation and monitoring to identify threats,
+                    verify intelligence, and inform every protective decision.
                   </p>
                 </div>
                 <LiveFeedBadge />
@@ -142,12 +150,13 @@ export function CinematicFeatures() {
                 />
                 <RiskBlips />
               </div>
-            </article>
+            </motion.article>
           </Reveal>
 
           {/* Card 3: Secure Transport */}
           <Reveal delay={260}>
-            <article
+            <motion.article
+              whileHover={reduce ? undefined : cardHover}
               className="relative flex h-[400px] flex-col justify-between overflow-hidden rounded-[32px] p-8"
               style={{
                 background: "rgba(232,226,220,0.5)",
@@ -163,8 +172,8 @@ export function CinematicFeatures() {
                   className="m-0 font-sans text-sm"
                   style={{ color: "#2A4A38", lineHeight: 1.6 }}
                 >
-                  Duis aute irure dolor in reprehenderit in voluptate velit esse
-                  cillum dolore eu fugiat.
+                  Reconnoitred routes, discreet vehicles and airport meet-and-greet
+                  for secure movement to and from venues, functions and terminals.
                 </p>
               </div>
               <div
@@ -181,9 +190,14 @@ export function CinematicFeatures() {
                   Route integrity
                 </span>
               </div>
-            </article>
+            </motion.article>
           </Reveal>
         </div>
+
+        {/* Full scope of services: interactive capabilities index */}
+        <Reveal delay={120} className="mt-[88px]">
+          <ServicesIndex />
+        </Reveal>
       </div>
     </section>
   );

@@ -24,7 +24,7 @@ const PROTOCOL_STEPS: Step[] = [
   {
     id: "01",
     title: "Reconnaissance",
-    desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
+    desc: "Pre-assignment threat profiling and detailed route surveys. We map the environment, the risks, and the contingencies before a principal ever moves.",
     bg: "#E8E4DC",
     ink: "#102018",
     sub: "#2A4A38",
@@ -37,7 +37,7 @@ const PROTOCOL_STEPS: Step[] = [
   {
     id: "02",
     title: "Implementation",
-    desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.",
+    desc: "Vetted operators deployed with military discipline. Plain clothes, low profile, single-point command. Protection that stays invisible until the moment it is needed.",
     bg: ACCENT,
     ink: "#F5F2EE",
     sub: "rgba(245,242,238,0.75)",
@@ -50,7 +50,7 @@ const PROTOCOL_STEPS: Step[] = [
   {
     id: "03",
     title: "Constant Watch",
-    desc: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    desc: "Continuous assessment and real-time adaptation, held to the standard that protected principals in conflict zones, for the full duration of the engagement.",
     bg: "#DCD8D0",
     ink: "#102018",
     sub: "#2A4A38",
@@ -137,24 +137,48 @@ export function CinematicProtocol() {
       className="relative w-full"
       style={{ background: "#DCD8D0", color: "#102018" }}
     >
-      {/* Header — celtic-knot band */}
+      {/* Header - celtic-knot line + bold title */}
       <div
-        className="flex flex-col items-center gap-6"
-        style={{ padding: "96px 24px 8px" }}
+        className="flex flex-col items-center gap-7 text-center"
+        style={{ padding: "clamp(80px,12vw,120px) 24px 8px" }}
       >
         <img
           src="/assets/celtic-knot.png"
           alt=""
           aria-hidden
-          className="h-11 object-contain"
-          style={{ width: "min(90%, 560px)", mixBlendMode: "multiply", opacity: 0.55 }}
+          className="object-contain"
+          style={{
+            width: "min(94%, 900px)",
+            height: "auto",
+            mixBlendMode: "multiply",
+            opacity: 0.6,
+          }}
         />
-        <span
-          className="font-mono text-xs font-semibold uppercase"
-          style={{ letterSpacing: "0.2em", color: "rgba(16,32,24,0.5)" }}
-        >
-          The Protocol
-        </span>
+        <div className="flex flex-col items-center gap-3">
+          <span
+            className="font-mono text-[11px] font-semibold uppercase"
+            style={{ letterSpacing: "0.28em", color: "rgba(16,32,24,0.45)" }}
+          >
+            How we operate
+          </span>
+          <h2
+            className="m-0 font-sans font-bold text-[#102018]"
+            style={{
+              fontSize: "clamp(44px,8vw,88px)",
+              letterSpacing: "-0.03em",
+              lineHeight: 0.98,
+            }}
+          >
+            The Protocol
+          </h2>
+          <p
+            className="m-0 mt-1 max-w-[540px] font-mono text-sm"
+            style={{ color: "rgba(16,32,24,0.55)", lineHeight: 1.7 }}
+          >
+            Three phases, one standard. The discipline that protected principals
+            in hostile environments, applied to every engagement.
+          </p>
+        </div>
       </div>
 
       {PROTOCOL_STEPS.map((step) => (
@@ -189,7 +213,7 @@ export function CinematicProtocol() {
               className="absolute font-mono text-[11px]"
               style={{ top: "36px", right: "44px", letterSpacing: "0.16em", color: step.badge }}
             >
-              {step.id} — 03
+              {step.id} / 03
             </span>
 
             <div

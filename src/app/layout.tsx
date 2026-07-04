@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "INOR Security | Close Protection Services",
   description:
-    "INOR Security — discreet close protection, executive security, event security and risk assessment. Security without compromise.",
+    "INOR Security. Discreet close protection, executive security, event security and risk assessment. Security without compromise.",
   applicationName: "INOR Security",
   keywords: [
     "close protection",

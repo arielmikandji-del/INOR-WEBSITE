@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 /**
- * Returns true when decorative motion is allowed — i.e. the user has NOT
+ * Returns true when decorative motion is allowed - i.e. the user has NOT
  * requested reduced motion. Mirrors the prototype's `motionEnabled` flag but
  * wires it to the OS `prefers-reduced-motion` preference (as the handoff notes
  * should be done in production). Starts `false` on the server / first paint so

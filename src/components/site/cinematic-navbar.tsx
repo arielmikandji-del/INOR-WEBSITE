@@ -1,16 +1,18 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
 /**
  * Fixed floating navbar (ground truth: INOR Security.dc.html).
  * Transparent with white text over the hero; on scroll past 40px it crossfades
- * (400ms ease) to a frosted light pill — rgba(220,216,208,0.85) + blur(20px) —
+ * (400ms ease) to a frosted light pill - rgba(220,216,208,0.85) + blur(20px) -
  * with dark text. The logo filter swaps brightness(0) invert(1) → none; the
  * "Initiate" CTA inverts dark/light.
  */
 export function CinematicNavbar() {
   const [scrolled, setScrolled] = useState(false);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -43,9 +45,9 @@ export function CinematicNavbar() {
       >
         <a href="#" className="flex items-center no-underline">
           <img
-            src="/assets/shield-and-name-transparent.svg"
-            alt="INOR Security"
-            className="h-[52px] w-auto object-contain"
+            src="/assets/INOR_logo_transparent-with%20slogan.svg"
+            alt="INOR Security. Security without compromise."
+            className="h-[58px] w-auto object-contain"
             style={{
               transition: "filter 400ms ease",
               filter: scrolled ? "none" : "brightness(0) invert(1)",
@@ -57,7 +59,7 @@ export function CinematicNavbar() {
           className="hidden items-center gap-8 font-mono text-xs uppercase md:flex"
           style={{ letterSpacing: "0.14em" }}
         >
-          {["Services", "Protocol", "Contact"].map((item) => (
+          {["Services", "Protocol", "Careers", "Contact"].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}
@@ -69,19 +71,21 @@ export function CinematicNavbar() {
           ))}
         </div>
 
-        <a
+        <motion.a
           href="#contact"
-          className="pointer-events-auto rounded-full px-[22px] py-2.5 font-mono text-xs font-semibold uppercase no-underline hover:scale-105"
+          whileHover={reduce ? undefined : { scale: 1.05 }}
+          whileTap={reduce ? undefined : { scale: 0.96 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="pointer-events-auto rounded-full px-[22px] py-2.5 font-mono text-xs font-semibold uppercase no-underline"
           style={{
             letterSpacing: "0.12em",
-            transition: "all 300ms ease",
             ...(scrolled
               ? { background: "#102018", color: "#F5F2EE" }
               : { background: "#F5F2EE", color: "#102018" }),
           }}
         >
           Initiate
-        </a>
+        </motion.a>
       </nav>
     </header>
   );

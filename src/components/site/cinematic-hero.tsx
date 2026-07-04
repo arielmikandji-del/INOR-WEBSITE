@@ -1,9 +1,22 @@
 "use client";
 
+import { motion, useReducedMotion, type Variants } from "motion/react";
 import { CelticDivider } from "./celtic-divider";
 import { useMotionEnabled } from "@/lib/use-motion";
 
 const ACCENT = "#2A4A38";
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/* Restrained, sequential entrance - reads as "systems coming online",
+   not decorative flourish. */
+const heroStagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+const heroItem: Variants = {
+  hidden: { opacity: 0, y: 26 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: EASE } },
+};
 
 // Exact shield paths from the prototype (INOR Security.dc.html).
 const SHIELD_PATHS = [
@@ -21,7 +34,8 @@ const SHIELD_PATHS = [
  * sits over the photo.
  */
 export function CinematicHero() {
-  const motion = useMotionEnabled();
+  const motionOn = useMotionEnabled();
+  const reduce = useReducedMotion();
 
   return (
     <section
@@ -50,21 +64,23 @@ export function CinematicHero() {
       </div>
 
       {/* Left content */}
-      <div
+      <motion.div
         className="relative z-30 flex w-full max-w-[720px] flex-col items-start"
-        style={{
-          paddingTop: "120px",
-          animation: "fadeUp 1.1s cubic-bezier(0.22,1,0.36,1) both",
-        }}
+        style={{ paddingTop: "120px" }}
+        variants={heroStagger}
+        initial={reduce ? false : "hidden"}
+        animate="show"
       >
         <h1 className="m-0 flex flex-col gap-2.5">
-          <span
+          <motion.span
+            variants={heroItem}
             className="font-sans font-bold uppercase text-[#F5F2EE]"
             style={{ fontSize: "clamp(20px,3vw,30px)", letterSpacing: "-0.01em" }}
           >
             Executive protection meets
-          </span>
-          <span
+          </motion.span>
+          <motion.span
+            variants={heroItem}
             className="font-drama italic text-[#F5F2EE]"
             style={{
               fontSize: "clamp(48px,9vw,112px)",
@@ -73,10 +89,11 @@ export function CinematicHero() {
             }}
           >
             Absolute discretion.
-          </span>
+          </motion.span>
         </h1>
 
-        <p
+        <motion.p
+          variants={heroItem}
           className="mt-9 max-w-[440px] font-mono text-sm uppercase"
           style={{
             color: "rgba(245,242,238,0.7)",
@@ -85,18 +102,30 @@ export function CinematicHero() {
           }}
         >
           Vetted operators. Plain clothes. Single-point command. Sized to the
-          principal — never to a package.
-        </p>
+          principal, never to a package.
+        </motion.p>
 
-        <a
+        <motion.a
           href="#contact"
-          className="mt-11 inline-flex w-fit items-center justify-center rounded-full font-mono text-sm font-semibold uppercase text-[#F5F2EE] no-underline transition-transform duration-300 hover:-translate-y-0.5"
-          style={{ background: ACCENT, padding: "16px 34px", letterSpacing: "0.14em" }}
+          variants={heroItem}
+          whileHover={reduce ? undefined : { y: -3 }}
+          whileTap={reduce ? undefined : { scale: 0.97 }}
+          transition={{ duration: 0.25, ease: EASE }}
+          className="mt-11 inline-flex w-fit items-center justify-center rounded-full font-mono text-sm font-semibold uppercase text-[#F5F2EE] no-underline"
+          style={{
+            background: ACCENT,
+            padding: "16px 34px",
+            letterSpacing: "0.14em",
+            boxShadow: "0 10px 30px rgba(16,32,24,0.35)",
+          }}
         >
           <span>Initiate Consultation</span>
-        </a>
+        </motion.a>
 
-        <div className="mt-10 flex flex-wrap items-center gap-3.5">
+        <motion.div
+          variants={heroItem}
+          className="mt-10 flex flex-wrap items-center gap-3.5"
+        >
           {["SIA-licensed operators", "NDA-backed engagements", "24/7 tasking"].map(
             (label, i) => (
               <span key={label} className="flex items-center gap-3.5">
@@ -116,34 +145,34 @@ export function CinematicHero() {
               </span>
             )
           )}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      {/* Right brand-mark island */}
+      {/* Right brand-mark island - bold on desktop, faint watermark on mobile */}
       <div
-        className="pointer-events-none absolute right-[6%] top-1/2 z-[6] flex items-center justify-center"
+        className="pointer-events-none absolute top-1/2 z-[4] flex items-center justify-center right-[-24%] opacity-[0.14] md:right-[6%] md:z-[6] md:opacity-100"
         style={{
           transform: "translateY(-50%)",
-          width: "min(40vw, 560px)",
-          height: "min(40vw, 560px)",
+          width: "clamp(340px, 58vw, 560px)",
+          height: "clamp(340px, 58vw, 560px)",
         }}
       >
         <span
-          className="absolute left-1/2 top-1/2 h-[520px] w-[520px] rounded-full"
+          className="absolute left-1/2 top-1/2 h-[94%] w-[94%] rounded-full"
           style={{
             border: "1px solid rgba(245,242,238,0.45)",
             transform: "translate(-50%,-50%)",
             opacity: 0,
-            animation: motion ? "heartbeatRing 6.5s ease-out infinite" : "none",
+            animation: motionOn ? "heartbeatRing 6.5s ease-out infinite" : "none",
           }}
         />
         <span
-          className="absolute left-1/2 top-1/2 h-[520px] w-[520px] rounded-full"
+          className="absolute left-1/2 top-1/2 h-[94%] w-[94%] rounded-full"
           style={{
             border: "1px solid rgba(245,242,238,0.45)",
             transform: "translate(-50%,-50%)",
             opacity: 0,
-            animation: motion
+            animation: motionOn
               ? "heartbeatRing 6.5s ease-out infinite 3.25s"
               : "none",
           }}
@@ -154,10 +183,10 @@ export function CinematicHero() {
           aria-label="INOR Security"
           className="relative z-[1] shrink-0"
           style={{
-            width: "720px",
-            height: "735px",
+            width: "128%",
+            height: "auto",
             filter: "drop-shadow(0 10px 26px rgba(0,0,0,0.5))",
-            animation: motion ? "heartbeatPulse 3.6s ease-in-out infinite" : "none",
+            animation: motionOn ? "heartbeatPulse 3.6s ease-in-out infinite" : "none",
           }}
         >
           {SHIELD_PATHS.map((d, i) => (

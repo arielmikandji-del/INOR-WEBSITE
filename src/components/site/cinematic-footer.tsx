@@ -1,7 +1,7 @@
 /**
  * Footer (ground truth: INOR Security.dc.html).
  * Near-black band with a top hairline. Left: the full footer lockup
- * (shield-and-name-footer.svg — already recolored warm white for the dark
+ * (shield-and-name-footer.svg - already recolored warm white for the dark
  * ground, so no filter) + copyright. Right: legal links.
  */
 export function CinematicFooter() {

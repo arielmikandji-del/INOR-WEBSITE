@@ -205,7 +205,7 @@
       drop-shadow(0 1px 0 rgba(220, 216, 208, 0.15));
   }
   /* Subtle Celtic knot texture using inline SVG */
-  /* 3D shield container — scene + perspective */
+  /* 3D shield container - scene + perspective */
   .scene-3d {
     perspective: 1400px;
     transform-style: preserve-3d;

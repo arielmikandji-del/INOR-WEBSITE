@@ -2,7 +2,7 @@
  * Hero divider mark (ground truth: INOR Security.dc.html).
  * A thin horizontal rule flanked left/right by gradient-fade lines, centered on
  * a plain circle-with-crosshair glyph (one circle, one horizontal, one vertical
- * line) — intentionally simple, NOT the shield logo. Positioned near the bottom
+ * line) - intentionally simple, NOT the shield logo. Positioned near the bottom
  * of the hero, over the photo.
  */
 export function CelticDivider() {
