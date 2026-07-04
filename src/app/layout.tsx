@@ -20,7 +20,7 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-const siteUrl = "https://www.inorsecurity.com";
+const siteUrl = "https://www.inor.uk";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
