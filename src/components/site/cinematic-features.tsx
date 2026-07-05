@@ -128,7 +128,7 @@ export function CinematicFeatures() {
                     style={{ color: "rgba(220,216,208,0.7)", lineHeight: 1.6 }}
                   >
                     Discreet observation and monitoring to identify threats,
-                    verify intelligence, and inform every protective decision.
+                    verify intelligence, and analyse operational decisions.
                   </p>
                 </div>
                 <LiveFeedBadge />
@@ -172,7 +172,7 @@ export function CinematicFeatures() {
                   className="m-0 font-sans text-sm"
                   style={{ color: "#2A4A38", lineHeight: 1.6 }}
                 >
-                  Reconnoitred routes, discreet vehicles and airport meet-and-greet
+                  Surveyed routes, discreet vehicles and airport meet-and-greet
                   for secure movement to and from venues, functions and terminals.
                 </p>
               </div>

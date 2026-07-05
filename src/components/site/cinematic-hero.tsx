@@ -81,12 +81,8 @@ export function CinematicHero() {
           </motion.span>
           <motion.span
             variants={heroItem}
-            className="font-drama italic text-[#F5F2EE]"
-            style={{
-              fontSize: "clamp(48px,9vw,112px)",
-              lineHeight: 0.9,
-              marginLeft: "-2px",
-            }}
+            className="font-sans font-bold uppercase text-[#F5F2EE]"
+            style={{ fontSize: "clamp(20px,3vw,30px)", letterSpacing: "-0.01em" }}
           >
             Absolute discretion.
           </motion.span>
@@ -101,8 +97,9 @@ export function CinematicHero() {
             lineHeight: 1.7,
           }}
         >
-          Vetted operators. Plain clothes. Single-point command. Sized to the
-          principal, never to a package.
+          Fully vetted operators with essential police and military experience.
+          Single point command structure. Security packages designed to be
+          specific to the principal.
         </motion.p>
 
         <motion.a
@@ -119,14 +116,14 @@ export function CinematicHero() {
             boxShadow: "0 10px 30px rgba(16,32,24,0.35)",
           }}
         >
-          <span>Initiate Consultation</span>
+          <span>Request Consultation</span>
         </motion.a>
 
         <motion.div
           variants={heroItem}
           className="mt-10 flex flex-wrap items-center gap-3.5"
         >
-          {["SIA-licensed operators", "NDA-backed engagements", "24/7 tasking"].map(
+          {["Military & counterterrorism background", "SIA-licensed operators", "24/7 tasking"].map(
             (label, i) => (
               <span key={label} className="flex items-center gap-3.5">
                 {i > 0 && (

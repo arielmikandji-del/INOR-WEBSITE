@@ -46,14 +46,23 @@ export function CinematicCareers() {
           </span>
         </h2>
 
-        <p
-          className="m-0 max-w-[560px] font-mono text-sm"
-          style={{ color: "rgba(16,32,24,0.6)", lineHeight: 1.7 }}
-        >
-          We are always interested in hearing from experienced close protection
-          officers and security professionals. If you have operated to a high
-          standard in demanding environments, we would like to know.
-        </p>
+        <div className="flex max-w-[560px] flex-col gap-5">
+          <p
+            className="m-0 font-mono text-sm"
+            style={{ color: "rgba(16,32,24,0.6)", lineHeight: 1.7 }}
+          >
+            We would like to hear from experienced operators with relevant
+            experience, who wish to join a professional and motivated team of
+            highly disciplined operators.
+          </p>
+          <p
+            className="m-0 font-mono text-sm"
+            style={{ color: "rgba(16,32,24,0.6)", lineHeight: 1.7 }}
+          >
+            A military or policing background is absolutely essential. Please
+            submit your CV for consideration. A member of our team will respond.
+          </p>
+        </div>
 
         <motion.a
           href="mailto:operations@inor.uk?subject=Careers%20Application"
@@ -68,7 +77,7 @@ export function CinematicCareers() {
             boxShadow: "0 12px 30px rgba(16,32,24,0.2)",
           }}
         >
-          <span>Send your CV to operations@inor.uk</span>
+          <span>Submit your CV to operations@inor.uk</span>
           <span
             aria-hidden
             className="transition-transform duration-300 group-hover:translate-x-1"

@@ -18,11 +18,11 @@ const SERVICES = [
   },
   {
     title: "Surveillance",
-    desc: "Discreet observation and monitoring to identify threats, verify intelligence and inform protective decisions.",
+    desc: "Discreet observation and monitoring to identify threats, verify intelligence and analyse operational decisions.",
   },
   {
     title: "Secure Transport",
-    desc: "Reconnoitred routes and discreet vehicles for movement to and from venues, functions and hotels.",
+    desc: "Surveyed routes and discreet vehicles for movement to and from venues, functions and hotels.",
   },
   {
     title: "Airport Meet & Greet",
@@ -30,7 +30,7 @@ const SERVICES = [
   },
   {
     title: "Venue Security",
-    desc: "Planning and on-the-ground teams for high-profile events, appearances and private functions.",
+    desc: "Venue risk assessment and security analysis provided. Fully vetted personnel with essential experience and capabilities available for all functions and venues.",
   },
   {
     title: "Transit of Documents & Goods",
@@ -38,7 +38,7 @@ const SERVICES = [
   },
   {
     title: "Penetration Testing",
-    desc: "Controlled, ethical testing of physical, personnel and procedural security to expose weaknesses before adversaries do.",
+    desc: "Controlled, ethical testing of physical, personal and procedural security to expose vulnerabilities and potential security breaches.",
   },
 ];
 

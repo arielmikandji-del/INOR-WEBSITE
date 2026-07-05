@@ -84,7 +84,7 @@ export function CinematicNavbar() {
               : { background: "#F5F2EE", color: "#102018" }),
           }}
         >
-          Initiate
+          Contact
         </motion.a>
       </nav>
     </header>

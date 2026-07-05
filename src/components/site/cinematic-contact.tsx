@@ -23,7 +23,7 @@ const CONTACT_METHODS: {
     label: "Careers",
     value: "operations@inor.uk",
     href: "mailto:operations@inor.uk?subject=Careers%20Application",
-    note: "Send your CV",
+    note: "Submit your CV",
   },
   { icon: "◷", label: "Response", value: "Within one business day" },
 ];
@@ -83,16 +83,15 @@ export function CinematicContact() {
                 className="font-drama italic"
                 style={{ color: "rgba(245,242,238,0.55)", fontSize: "1.1em" }}
               >
-                from the first word.
+                assured.
               </span>
             </h2>
             <p
               className="m-0 mb-12 max-w-[440px] font-mono text-sm"
               style={{ color: "rgba(245,242,238,0.7)", lineHeight: 1.7 }}
             >
-              Every enquiry is handled in strict confidence. Share only what you
-              are comfortable putting in writing. A member of our team will
-              respond discreetly to arrange a secure conversation.
+              All enquiries reviewed in strict confidence. A member of our team
+              will reply with professional discretion implemented.
             </p>
 
             <div className="mt-auto flex flex-col gap-7">
@@ -164,18 +163,18 @@ export function CinematicContact() {
             >
               <div className="flex flex-col gap-2">
                 <label className="font-mono text-[10px] uppercase" style={labelStyle}>
-                  Identifier
+                  Name
                 </label>
                 <input
                   type="text"
-                  placeholder="Name or Callsign"
+                  placeholder="Full Name"
                   className="font-sans outline-none"
                   style={inputStyle}
                 />
               </div>
               <div className="flex flex-col gap-2">
                 <label className="font-mono text-[10px] uppercase" style={labelStyle}>
-                  Comms Relay
+                  Email
                 </label>
                 <input
                   type="email"
@@ -186,11 +185,21 @@ export function CinematicContact() {
               </div>
               <div className="flex flex-col gap-2">
                 <label className="font-mono text-[10px] uppercase" style={labelStyle}>
-                  Nature of Request
+                  Contact Number
+                </label>
+                <input
+                  type="tel"
+                  placeholder="Contact Number"
+                  className="font-sans outline-none"
+                  style={inputStyle}
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="font-mono text-[10px] uppercase" style={labelStyle}>
+                  Nature of Enquiry
                 </label>
                 <textarea
                   rows={4}
-                  placeholder="Provide minimal necessary details..."
                   className="font-sans outline-none"
                   style={{ ...inputStyle, resize: "none" }}
                 />
@@ -209,7 +218,7 @@ export function CinematicContact() {
                   gap: "12px",
                 }}
               >
-                <span>Transmit Request</span>
+                <span>Send request</span>
                 <span
                   aria-hidden
                   className="transition-transform duration-300 group-hover:translate-x-1"
