@@ -180,7 +180,7 @@ export function CinematicServicesSlides() {
       {/* Header - celtic-knot line (recoloured to the button green) + bold title */}
       <div
         className="flex flex-col items-center gap-7 text-center"
-        style={{ padding: "clamp(80px,12vw,120px) 24px 8px" }}
+        style={{ padding: "clamp(18px,6vw,96px) 24px 8px" }}
       >
         <img
           src="/assets/celtic-knot-green.png"

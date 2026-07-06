@@ -22,7 +22,7 @@ export function CinematicFeatures() {
     <section
       id="services"
       className="relative w-full overflow-hidden"
-      style={{ background: "#DCD8D0", padding: "96px 24px" }}
+      style={{ background: "#DCD8D0", padding: "clamp(56px,12vw,96px) 24px clamp(18px,5vw,64px)" }}
     >
       {/* Accent glow */}
       <div
