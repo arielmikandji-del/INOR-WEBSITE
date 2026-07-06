@@ -155,6 +155,12 @@
 @keyframes fpFlash { 0%, 38%, 62%, 100% { stroke: var(--fp-base, #102018); } 48% { stroke: var(--flash-color, #2A4A38); } }
 @keyframes heartbeatPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.018); } }
 @keyframes heartbeatRing { 0% { transform: translate(-50%,-50%) scale(0.9); opacity: 0.28; } 100% { transform: translate(-50%,-50%) scale(1.4); opacity: 0; } }
+/* Service-slide bespoke motion */
+@keyframes scanBar { 0% { transform: translateY(-58px); opacity: 0; } 12% { opacity: 1; } 50% { transform: translateY(58px); opacity: 1; } 62% { opacity: 0; } 100% { transform: translateY(58px); opacity: 0; } }
+@keyframes shackleLift { 0%, 58%, 100% { transform: translateY(0); } 74%, 88% { transform: translateY(-9px); } }
+@keyframes floatSoft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes seqBlink { 0%, 100% { opacity: 0.18; } 50% { opacity: 1; } }
+@keyframes camSweep { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

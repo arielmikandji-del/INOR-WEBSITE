@@ -59,7 +59,7 @@ export function CinematicNavbar() {
           className="hidden items-center gap-8 font-mono text-xs uppercase md:flex"
           style={{ letterSpacing: "0.14em" }}
         >
-          {["Services", "Protocol", "Careers", "Contact"].map((item) => (
+          {["Services", "Careers", "Contact"].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}

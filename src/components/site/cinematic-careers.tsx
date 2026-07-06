@@ -37,13 +37,6 @@ export function CinematicCareers() {
           style={{ fontSize: "clamp(32px,5.4vw,60px)", letterSpacing: "-0.02em", lineHeight: 1.05 }}
         >
           Built by operators.
-          <br />
-          <span
-            className="font-drama italic"
-            style={{ color: "rgba(16,32,24,0.55)", fontSize: "1.05em" }}
-          >
-            Always looking for the next.
-          </span>
         </h2>
 
         <div className="flex max-w-[560px] flex-col gap-5">

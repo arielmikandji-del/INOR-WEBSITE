@@ -1,7 +1,7 @@
 import { CinematicNavbar } from "@/components/site/cinematic-navbar";
 import { CinematicHero } from "@/components/site/cinematic-hero";
 import { CinematicFeatures } from "@/components/site/cinematic-features";
-import { CinematicProtocol } from "@/components/site/cinematic-protocol";
+import { CinematicServicesSlides } from "@/components/site/cinematic-services-slides";
 import { CinematicTagline } from "@/components/site/cinematic-tagline";
 import { CinematicCareers } from "@/components/site/cinematic-careers";
 import { CinematicContact } from "@/components/site/cinematic-contact";
@@ -16,7 +16,7 @@ export default function Home() {
       <main id="main" className="flex flex-1 flex-col">
         <CinematicHero />
         <CinematicFeatures />
-        <CinematicProtocol />
+        <CinematicServicesSlides />
         <CinematicTagline />
         <CinematicCareers />
         <CinematicContact />

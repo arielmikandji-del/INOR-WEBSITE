@@ -2,7 +2,6 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { Reveal } from "./reveal";
-import { ServicesIndex } from "./services-index";
 import { useMotionEnabled } from "@/lib/use-motion";
 
 const ACCENT = "#2A4A38";
@@ -193,11 +192,6 @@ export function CinematicFeatures() {
             </motion.article>
           </Reveal>
         </div>
-
-        {/* Full scope of services: interactive capabilities index */}
-        <Reveal delay={120} className="mt-[88px]">
-          <ServicesIndex />
-        </Reveal>
       </div>
     </section>
   );

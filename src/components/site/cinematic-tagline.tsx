@@ -168,9 +168,8 @@ export function CinematicTagline() {
               letterSpacing: "0.02em",
             }}
           >
-            INOR was founded to deliver the standard our team has lived by on the
-            ground: protection built on decades of real operational experience,
-            for clients who demand security without compromise.
+            INOR Security was built on decades of real-world operational
+            experience for clients who demand security without compromise.
           </p>
         </Reveal>
 
