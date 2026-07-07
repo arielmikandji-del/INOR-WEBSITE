@@ -161,6 +161,11 @@
 @keyframes floatSoft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 @keyframes seqBlink { 0%, 100% { opacity: 0.18; } 50% { opacity: 1; } }
 @keyframes camSweep { 0%, 100% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } }
+/* Pause a service card's SVG animations while it is scrolled off-screen, and
+   release its GPU layer so eight full-height cards aren't all promoted at once */
+[data-service-card].is-idle *,
+[data-service-card].is-idle { animation-play-state: paused !important; }
+[data-service-card].is-idle { will-change: auto !important; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

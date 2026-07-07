@@ -120,45 +120,77 @@ export function CinematicServicesSlides() {
     const wraps = Array.from(
       section.querySelectorAll<HTMLElement>("[data-service-wrap]")
     );
+    // Cache card refs and last-applied styles once (no per-frame querySelector,
+    // no redundant style writes).
+    const cards = wraps.map((w) =>
+      w.querySelector<HTMLElement>("[data-service-card]")
+    );
+    const lastT = new Array<string>(wraps.length).fill("");
+    const lastF = new Array<string>(wraps.length).fill("");
+    const tops = new Array<number>(wraps.length);
     let raf = 0;
     const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
     const update = () => {
       raf = 0;
       const vh = window.innerHeight || 1;
-      wraps.forEach((wrap, i) => {
-        const card = wrap.querySelector<HTMLElement>("[data-service-card]");
-        if (!card) return;
+      // Read pass: gather all layout reads first to avoid read/write thrashing.
+      for (let i = 0; i < wraps.length; i++) {
+        tops[i] = wraps[i].getBoundingClientRect().top;
+      }
+      // Write pass: only touch the DOM when a value actually changed.
+      for (let i = 0; i < wraps.length; i++) {
+        const card = cards[i];
+        if (!card) continue;
         let scale = 1,
           ty = 0,
           dim = 0;
-        const next = wraps[i + 1];
-        if (next) {
-          const p = clamp01(1 - next.getBoundingClientRect().top / vh);
+        if (i + 1 < wraps.length) {
+          const p = clamp01(1 - tops[i + 1] / vh);
           scale = 1 - p * 0.1;
           ty = -p * 26;
           dim = p;
         }
-        let rot = 0;
-        if (i > 0) {
-          const q = clamp01(wrap.getBoundingClientRect().top / vh);
-          rot = q * 2;
-        }
-        card.style.transform = `scale(${scale.toFixed(4)}) translateY(${ty.toFixed(
+        const rot = i > 0 ? clamp01(tops[i] / vh) * 2 : 0;
+        const t = `scale(${scale.toFixed(4)}) translateY(${ty.toFixed(
           1
         )}px) rotate(${rot.toFixed(2)}deg)`;
-        card.style.filter = dim
-          ? `brightness(${(1 - dim * 0.35).toFixed(3)}) saturate(${(
-              1 -
-              dim * 0.3
-            ).toFixed(3)})`
-          : "";
-      });
+        if (t !== lastT[i]) {
+          card.style.transform = t;
+          lastT[i] = t;
+        }
+        const f =
+          dim > 0.001
+            ? `brightness(${(1 - dim * 0.35).toFixed(3)}) saturate(${(
+                1 -
+                dim * 0.3
+              ).toFixed(3)})`
+            : "";
+        if (f !== lastF[i]) {
+          card.style.filter = f;
+          lastF[i] = f;
+        }
+      }
     };
 
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
     };
+
+    // Pause a card's SVG animations while it is well outside the viewport so the
+    // compositor isn't ticking eight animated cards at once during scroll.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const card = (e.target as HTMLElement).querySelector<HTMLElement>(
+            "[data-service-card]"
+          );
+          card?.classList.toggle("is-idle", !e.isIntersecting);
+        }
+      },
+      { rootMargin: "300px 0px" }
+    );
+    wraps.forEach((w) => io.observe(w));
 
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -166,6 +198,7 @@ export function CinematicServicesSlides() {
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      io.disconnect();
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);
@@ -228,7 +261,10 @@ export function CinematicServicesSlides() {
           style={{
             position: "sticky",
             top: step.stickyTop,
-            minHeight: "100dvh",
+            // Content-driven height (below the ~80-85dvh cards) so there is no
+            // "dead" scroll where a pinned card just sits before the next one —
+            // that dead zone read as lag while scrolling.
+            minHeight: "80dvh",
             padding: "clamp(16px,3vw,40px)",
           }}
         >
