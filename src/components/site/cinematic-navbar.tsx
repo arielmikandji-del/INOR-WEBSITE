@@ -30,8 +30,8 @@ export function CinematicNavbar() {
           ...(scrolled
             ? {
                 background: "rgba(220,216,208,0.85)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)",
                 border: "1px solid rgba(16,32,24,0.1)",
                 color: "#102018",
                 boxShadow: "0 8px 24px rgba(16,32,24,0.12)",

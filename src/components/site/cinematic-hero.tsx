@@ -28,7 +28,7 @@ const SHIELD_PATHS = [
 
 /**
  * Hero (ground truth: INOR Security.dc.html).
- * Full-bleed photo-suv-dusk.jpg + diagonal scrim, left-aligned copy block that
+ * Full-bleed photo-suv-dusk.webp + diagonal scrim, left-aligned copy block that
  * fades/slides up on load, and a large accent shield "island" on the right with
  * two pulsing heartbeat rings and a subtle scale-pulse. Bottom crosshair divider
  * sits over the photo.
@@ -45,7 +45,7 @@ export function CinematicHero() {
       {/* Background photo + diagonal scrim */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/assets/photo-suv-dusk.jpg"
+          src="/assets/photo-suv-dusk.webp"
           alt=""
           aria-hidden
           className="absolute inset-0 h-full w-full object-cover"

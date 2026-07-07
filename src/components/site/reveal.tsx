@@ -3,10 +3,11 @@
 import { useEffect, useRef } from "react";
 
 const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+// Opacity + transform only: both are GPU-composited and cheap. (A blur-filter
+// reveal was repaint-heavy on every wrapped section and caused scroll jank.)
 const HIDDEN = {
   opacity: "0",
   transform: "translateY(72px) scale(0.96)",
-  filter: "blur(8px)",
 };
 
 type Props = {
@@ -33,9 +34,9 @@ export function Reveal({ children, delay = 0, className, style }: Props) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     Object.assign(el.style, HIDDEN);
-    el.style.transition = `opacity 1.1s ${EASE}, transform 1.1s ${EASE}, filter 1.1s ${EASE}`;
+    el.style.transition = `opacity 1.1s ${EASE}, transform 1.1s ${EASE}`;
     el.style.transitionDelay = `${delay}ms`;
-    el.style.willChange = "opacity, transform, filter";
+    el.style.willChange = "opacity, transform";
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -43,8 +44,13 @@ export function Reveal({ children, delay = 0, className, style }: Props) {
           if (e.isIntersecting) {
             el.style.opacity = "1";
             el.style.transform = "translateY(0) scale(1)";
-            el.style.filter = "none";
             io.unobserve(e.target);
+            // Release the compositor layer once the reveal has finished.
+            const clear = () => {
+              el.style.willChange = "auto";
+              el.removeEventListener("transitionend", clear);
+            };
+            el.addEventListener("transitionend", clear);
           }
         });
       },

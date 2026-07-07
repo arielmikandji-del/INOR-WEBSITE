@@ -30,8 +30,8 @@ export function CinematicFeatures() {
         style={{
           width: "800px",
           height: "800px",
-          background: "#2A4A380d",
-          filter: "blur(90px)",
+          background:
+            "radial-gradient(circle, rgba(42,74,56,0.10), rgba(42,74,56,0) 70%)",
           transform: "translate(33%, -50%)",
         }}
       />
@@ -134,7 +134,7 @@ export function CinematicFeatures() {
               </div>
               <div className="absolute bottom-0 right-0 h-[60%] w-full overflow-hidden">
                 <img
-                  src="/assets/photo-aerial-city.jpg"
+                  src="/assets/photo-aerial-city.webp"
                   alt=""
                   aria-hidden
                   className="absolute inset-0 h-full w-full object-cover"

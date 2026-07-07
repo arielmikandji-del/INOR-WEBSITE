@@ -52,7 +52,7 @@ export function CinematicTagline() {
       {/* Upper band: Our Standard over the control-room photo */}
       <div className="relative overflow-hidden">
         <img
-          src="/assets/photo-control-room.jpg"
+          src="/assets/photo-control-room.webp"
           alt=""
           aria-hidden
           className="absolute inset-0 h-full w-full object-cover"
