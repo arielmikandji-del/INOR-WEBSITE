@@ -58,7 +58,7 @@ export function CinematicCareers() {
         </div>
 
         <motion.a
-          href="mailto:operations@inor.uk?subject=Careers%20Application"
+          href="mailto:inorsecurity@gmail.com?subject=Careers%20Application"
           whileHover={reduce ? undefined : { y: -3 }}
           whileTap={reduce ? undefined : { scale: 0.97 }}
           transition={{ duration: 0.25, ease: EASE }}
@@ -70,7 +70,7 @@ export function CinematicCareers() {
             boxShadow: "0 12px 30px rgba(16,32,24,0.2)",
           }}
         >
-          <span>Submit your CV to operations@inor.uk</span>
+          <span>Submit your CV to inorsecurity@gmail.com</span>
           <span
             aria-hidden
             className="transition-transform duration-300 group-hover:translate-x-1"

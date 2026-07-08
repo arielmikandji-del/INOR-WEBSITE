@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Reveal } from "./reveal";
 
-const WEB3FORMS_KEY = "ba2937ea-88af-4f1a-8e4a-8ba306ab1f07";
+const WEB3FORMS_KEY = "f7c7fda9-68b8-4d3d-b6ca-c90e4dc5fdd9";
 
 const ACCENT = "#2A4A38";
 
