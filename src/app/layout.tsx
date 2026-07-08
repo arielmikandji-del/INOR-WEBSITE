@@ -46,9 +46,9 @@ export const metadata: Metadata = {
     siteName: "INOR Security",
     images: [
       {
-        url: "/assets/INOR_logo_transparent.svg",
-        width: 1200,
-        height: 1200,
+        url: "/assets/FAVICON.png",
+        width: 2000,
+        height: 2000,
         alt: "INOR Security",
       },
     ],
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     title: "INOR Security | Close Protection Services",
     description:
       "Discreet close protection, executive security, event security and risk assessment.",
-    images: ["/assets/INOR_logo_transparent.svg"],
+    images: ["/assets/FAVICON.png"],
   },
   icons: {
     icon: "/assets/FAVICON.png",
