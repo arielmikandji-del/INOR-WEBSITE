@@ -47,9 +47,9 @@ export function CinematicNavbar() {
           <img
             src="/assets/INOR_logo_transparent-with%20slogan.svg"
             alt="INOR Security. Security without compromise."
-            className="h-[74px] w-auto object-contain md:h-[92px]"
+            className={`w-auto object-contain md:h-[100px] ${scrolled ? "h-[74px]" : "h-[150px]"}`}
             style={{
-              transition: "filter 400ms ease",
+              transition: "filter 400ms ease, height 400ms ease",
               filter: scrolled ? "none" : "brightness(0) invert(1)",
             }}
           />
