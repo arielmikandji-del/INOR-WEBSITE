@@ -65,8 +65,7 @@ export function CinematicHero() {
 
       {/* Left content */}
       <motion.div
-        className="relative z-30 flex w-full max-w-[720px] flex-col items-start"
-        style={{ paddingTop: "120px" }}
+        className="relative z-30 flex w-full max-w-[720px] flex-col items-start pt-[83px] md:pt-[120px]"
         variants={heroStagger}
         initial={reduce ? false : "hidden"}
         animate="show"
