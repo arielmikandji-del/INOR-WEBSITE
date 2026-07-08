@@ -18,14 +18,14 @@ const CONTACT_METHODS: {
   {
     icon: "✉",
     label: "Enquiries",
-    value: "operations@inor.uk",
-    href: "mailto:operations@inor.uk",
+    value: "inorsecurity@gmail.com",
+    href: "mailto:inorsecurity@gmail.com",
   },
   {
     icon: "⚑",
     label: "Careers",
-    value: "operations@inor.uk",
-    href: "mailto:operations@inor.uk?subject=Careers%20Application",
+    value: "inorsecurity@gmail.com",
+    href: "mailto:inorsecurity@gmail.com?subject=Careers%20Application",
     note: "Submit your CV",
   },
   { icon: "◷", label: "Response", value: "Within one business day" },
