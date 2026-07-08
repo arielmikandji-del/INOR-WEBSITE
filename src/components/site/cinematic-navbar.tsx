@@ -5,17 +5,20 @@ import { useEffect, useState } from "react";
 
 /**
  * Fixed floating navbar (ground truth: INOR Security.dc.html).
- * Transparent with white text over the hero; on scroll past 40px it crossfades
- * (400ms ease) to a frosted light pill - rgba(220,216,208,0.85) + blur(20px) -
- * with dark text. The logo filter swaps brightness(0) invert(1) → none; the
- * "Initiate" CTA inverts dark/light.
+ * Transparent with white text over the hero; on scroll it crossfades to a
+ * frosted light pill with dark text. The logo filter swaps
+ * brightness(0) invert(1) → none; the "Initiate" CTA inverts dark/light.
+ *
+ * The logo's layout height never changes: the enlarged top-of-page state is a
+ * transform scale (composited, no reflow). Animating the img height reflowed
+ * the fixed header every frame and lagged behind the scroll on phones.
  */
 export function CinematicNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -26,7 +29,8 @@ export function CinematicNavbar() {
       <nav
         className="pointer-events-auto flex w-full max-w-[900px] items-center justify-between gap-6 rounded-[2rem] px-6 py-3"
         style={{
-          transition: "all 400ms ease",
+          transition:
+            "background-color 250ms ease, border-color 250ms ease, color 250ms ease, box-shadow 250ms ease",
           ...(scrolled
             ? {
                 background: "rgba(220,216,208,0.85)",
@@ -47,9 +51,11 @@ export function CinematicNavbar() {
           <img
             src="/assets/INOR_logo_transparent-with%20slogan.svg"
             alt="INOR Security. Security without compromise."
-            className={`w-auto object-contain md:h-[100px] ${scrolled ? "h-[74px]" : "h-[150px]"}`}
+            className="h-[74px] w-auto object-contain md:h-[100px]"
             style={{
-              transition: "filter 400ms ease, height 400ms ease",
+              transition: "filter 250ms ease, transform 250ms ease",
+              transformOrigin: "left center",
+              transform: scrolled ? "scale(1)" : "scale(1.4)",
               filter: scrolled ? "none" : "brightness(0) invert(1)",
             }}
           />
