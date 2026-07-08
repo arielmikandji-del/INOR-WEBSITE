@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Reveal } from "./reveal";
+
+const WEB3FORMS_KEY = "ba2937ea-88af-4f1a-8e4a-8ba306ab1f07";
 
 const ACCENT = "#2A4A38";
 
@@ -51,6 +54,29 @@ const labelStyle: React.CSSProperties = {
  */
 export function CinematicContact() {
   const reduce = useReducedMotion();
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (status === "submitting") return;
+    // Build FormData synchronously before awaiting (the event is reused).
+    const formData = new FormData(e.currentTarget);
+    setStatus("submitting");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: formData,
+      });
+      const data = await res.json();
+      setStatus(res.ok && data.success ? "success" : "error");
+    } catch {
+      setStatus("error");
+    }
+  };
+
   return (
     <section
       id="contact"
@@ -157,16 +183,54 @@ export function CinematicContact() {
               borderRadius: "32px",
             }}
           >
+            {status === "success" ? (
+              <div
+                className="relative z-10 flex flex-col items-center justify-center gap-4 text-center"
+                style={{ minHeight: "320px" }}
+              >
+                <div
+                  className="flex h-14 w-14 items-center justify-center rounded-full"
+                  style={{
+                    border: "1px solid rgba(245,242,238,0.2)",
+                    background: "rgba(245,242,238,0.05)",
+                  }}
+                >
+                  <span style={{ fontSize: "24px", color: ACCENT }}>✓</span>
+                </div>
+                <p
+                  className="m-0 max-w-[320px] font-mono text-sm"
+                  style={{ color: "rgba(245,242,238,0.85)", lineHeight: 1.7 }}
+                >
+                  Thank you, we will be in touch shortly
+                </p>
+              </div>
+            ) : (
             <form
               className="relative z-10 flex flex-col gap-6"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
             >
+              <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+              <input
+                type="hidden"
+                name="subject"
+                value="New enquiry from the INOR Security website"
+              />
+              <input
+                type="checkbox"
+                name="botcheck"
+                tabIndex={-1}
+                autoComplete="off"
+                style={{ display: "none" }}
+                aria-hidden
+              />
               <div className="flex flex-col gap-2">
                 <label className="font-mono text-[10px] uppercase" style={labelStyle}>
                   Name
                 </label>
                 <input
                   type="text"
+                  name="name"
+                  required
                   placeholder="Full Name"
                   className="font-sans outline-none"
                   style={inputStyle}
@@ -178,6 +242,8 @@ export function CinematicContact() {
                 </label>
                 <input
                   type="email"
+                  name="email"
+                  required
                   placeholder="Email Address"
                   className="font-sans outline-none"
                   style={inputStyle}
@@ -189,6 +255,7 @@ export function CinematicContact() {
                 </label>
                 <input
                   type="tel"
+                  name="phone"
                   placeholder="Contact Number"
                   className="font-sans outline-none"
                   style={inputStyle}
@@ -199,6 +266,8 @@ export function CinematicContact() {
                   Nature of Enquiry
                 </label>
                 <textarea
+                  name="message"
+                  required
                   rows={4}
                   className="font-sans outline-none"
                   style={{ ...inputStyle, resize: "none" }}
@@ -206,8 +275,13 @@ export function CinematicContact() {
               </div>
               <motion.button
                 type="submit"
-                whileHover={reduce ? undefined : { scale: 1.02 }}
-                whileTap={reduce ? undefined : { scale: 0.98 }}
+                disabled={status === "submitting"}
+                whileHover={
+                  reduce || status === "submitting" ? undefined : { scale: 1.02 }
+                }
+                whileTap={
+                  reduce || status === "submitting" ? undefined : { scale: 0.98 }
+                }
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 className="group mt-2 flex cursor-pointer items-center justify-between rounded-full font-mono text-xs uppercase text-[#F5F2EE]"
                 style={{
@@ -216,6 +290,7 @@ export function CinematicContact() {
                   padding: "16px 32px",
                   letterSpacing: "0.12em",
                   gap: "12px",
+                  opacity: status === "submitting" ? 0.7 : 1,
                 }}
               >
                 <span>Send request</span>
@@ -226,7 +301,17 @@ export function CinematicContact() {
                   →
                 </span>
               </motion.button>
+              {status === "error" && (
+                <p
+                  role="alert"
+                  className="m-0 font-mono text-xs"
+                  style={{ color: "#e2725b", letterSpacing: "0.04em" }}
+                >
+                  Something went wrong. Please try again.
+                </p>
+              )}
             </form>
+            )}
           </Reveal>
         </div>
       </div>
