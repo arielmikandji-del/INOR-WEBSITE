@@ -51,11 +51,11 @@ export function CinematicNavbar() {
           <img
             src="/assets/INOR_logo_transparent-with%20slogan.svg"
             alt="INOR Security. Security without compromise."
-            className="h-[74px] w-auto object-contain md:h-[100px]"
+            className={`h-[74px] w-auto origin-top-left object-contain md:h-[100px] ${
+              scrolled ? "scale-100" : "scale-[2.03] md:scale-150"
+            }`}
             style={{
               transition: "filter 250ms ease, transform 250ms ease",
-              transformOrigin: "left center",
-              transform: scrolled ? "scale(1)" : "scale(1.4)",
               filter: scrolled ? "none" : "brightness(0) invert(1)",
             }}
           />
