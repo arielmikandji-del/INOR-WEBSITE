@@ -158,7 +158,7 @@ export function CinematicTagline() {
           </span>
           <img
             src="/images/global-operations-map.webp"
-            alt="INOR global areas of operation, with Europe, Africa and South America highlighted"
+            alt="INOR global areas of operation shown across a dotted world map"
             className="h-auto w-full"
             style={{ maxWidth: "100%" }}
             loading="lazy"
